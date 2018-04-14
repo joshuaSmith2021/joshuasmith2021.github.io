@@ -1,39 +1,40 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono|Roboto:300" rel="stylesheet">
-    <title>SmittyCraft</title>
-    <style>p,h1,h2,h3,h4,h5,h6,span,div{font-family:'Roboto'!important;}.mono{font-family:'Roboto Mono'!important;}</style>
+    <title>Welcome</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="https://smith2021.github.io/hermes/w3.css"/>
+    <style>
+/*Fonts*/
+.roboto{font-family:'Roboto',Helvetica,sans-serif;}
+.mono{font-family:'Roboto Mono',Courier;}
+.thin{font-weight:300;}
+/*Palette*/
+.dark{background:#455A64;}
+.primary{background:#607D8B;}
+.light{background:#CFD8DC;}
+.accent{background: #536DFE; }
+.divider{border-color:#BDBDBD;}
+.dark,.primary,.accent{color:#ffffff}
+.light{color:#000000;}
+    </style>
   </head>
   <body>
-    <div class="w3-jumbo">test</div>
-    <div class="w3-bar w3-top navigation w3-xlarge"></div>
-    <div class="w3-bar navigation w3-xlarge"></div>
-    <div class="w3-padding-large">
-      <h2>Welcome!</h2>
-      <p class="w3-large">This site will be my portfolio or something. I got a free domain name so I took it, but I didn't stop to think about what I would put on it. So here it is...</p>
+    <div class="w3-bar accent roboto w3-padding-small w3-large">
+      <a href="#"><div class="w3-bar-item">Home</div></a>
+      <a href="#"><div class="w3-bar-item">Products</div></a>
+      <a href="#"><div class="w3-bar-item">About</div></a>
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <div class="w3-padding-large roboto">
+      <h2>Welcome</h2>
+    </div>
     <script>
-$(document).ready(function () {
-  var links = [
-    {
-      name: 'Home',
-      href: '/'
-    }
-  ];
-  var i;
-  var string = '';
-  var navs = document.getElementsByClassName('navigation');
-  for (i = 0; i < links.length; i++) {
-    string += '<a href="' + links[i].href + '"><div class="w3-button">' + links[i].name + '</div></a>';
-  }
-  for (i = 0; i < navs.length; i++) {
-    $(navs[i]).html(string);
-  }
+window.addEventListener('load', function () {
+  document.getElementsByTagName('head')[0].innerHTML += '<link href="https://fonts.googleapis.com/css?family=Roboto+Mono|Roboto:300" rel="stylesheet">';
 });
     </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   </body>
 </html>
