@@ -11,19 +11,28 @@
   </head>
   <body>
     <div class="w3-bar accent roboto w3-padding-small w3-large">
-      <i class="material-icons w3-bar-item useless" style="cursor:pointer">menu</i>
+      <i class="material-icons w3-bar-item useless" style="cursor:pointer" id="openSidebar">menu</i>
       <a href="#"><div class="w3-bar-item useless w3-right">About</div></a>
       <a href="#"><div class="w3-bar-item useless w3-right">Products</div></a>
       <a href="#"><div class="w3-bar-item useless w3-right">Home</div></a>
     </div>
-    <div class="sidebar"></div>
+    <div class="sidebar roboto" hidden>
+      <div class="w3-xlarge w3-padding material-icons primary" style="cursor:pointer;width:100%" id="closeSidebar">close</div>
+      <div class="w3-padding-large" style="text-align:center">
+        <button class="raised accent">Home</button>
+        <hr class="divider"/>
+        <button class="raised accent">Products</button>
+        <hr class="divider"/>
+        <button class="raised accent">About</button>
+      </div>
+    </div>
     <div class="w3-padding-large roboto">
       <h2>SmittyCraft</h2>
       <p class="w3-large">This page is really just a template. As you may have noticed, the links on the navigation bar do not work. The design is clean, simple, and based on Google's material design. I tried to learn how to use <a href="https://getmdl.io">Material Design Lite</a>, but it was confusing and their example code did not really work. Because of this, I created this page where I replicate their features with simpler, JavaScript-free versions of Material components using <a href="https://www.w3schools.com/w3css/">W3CSS</a>.</p>
       <p class="w3-large">FAB Button:</p>
       <button class="fab accent">
         <i class="material-icons">file_download</i>
-      </button>
+        </button>
       <pre><code class="html">&lt;button class="fab accent"&gt;
   &lt;i class="material-icons"&gt;file_download&lt;/i&gt;
 &lt;/button&gt;</code></pre>
@@ -40,8 +49,8 @@ window.addEventListener('load', function () {
     <script src="https://smith2021.github.io/hermes/highlight.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
     <script>
-$('.useless').click(function () {
-  alert('Why are you clicking these? They do not even go anywhere.');
+$('#openSidebar, #closeSidebar').click(function () {
+  $('.sidebar').slideToggle(250);
 });
     </script>
   </body>
