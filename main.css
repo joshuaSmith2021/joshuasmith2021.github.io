@@ -7,13 +7,14 @@
 .dark{background:#455A64;}
 .primary{background:#607D8B;}
 .light{background:#CFD8DC;}
-.accent{background: #536DFE; }
+.accent{background: #536DFE;}
 .divider{border-color:#BDBDBD;}
 .dark,.primary,.accent{color:#ffffff}
 .light{color:#000000;}
 .footer{background-color:#424242;padding:16px 40px;color:#999999;}
-.footer>h4{color:#fefefe;}
-.footer>table{width:100%;}
+.footer-header{color:#fefefe;}
+.footer-list{list-style-type:none;padding:0;margin:0;}
+.footer-item{margin:0 0 5px 0;}
 
 /*Buttons*/
 .fab{border:none;border-radius:50%;font-size:24px;height:56px;margin:auto;min-width:56px;width:56px;padding:0;overflow:hidden;box-shadow:0 1px 1.5px 0 rgba(0,0,0,.12),0 1px 1px 0 rgba(0,0,0,.24);position:relative;line-height:normal}
