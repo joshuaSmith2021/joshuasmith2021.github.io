@@ -43,34 +43,38 @@
       <h2 class="display-4">Python Developer</h2>
     </div>
   </div>
-  <div class="container py-4">
-    <div class="row">
-      <div class="col-md-4">
-        <h1 class="segoe">Chat Bots</h1>
-        <p>
-          I have made <a href="https://youtu.be/SFe7djE1hQA">Discord bots</a> that respond to direct commands with 
-          set parameters as well as AI-powered bots that recognize intents
-          from speech by integrating with Dialogflow.
-        </p>
-      </div>
-      <div class="col-md-4">
-        <h1 class="segoe">Smart Integrations</h1>
-        <p>
-          Many of my projects pull data from external sources, and I have
-          used REST APIs, client libraries, and web scraping to get the
-          data myself.
-        </p>
-      </div>
-      <div class="col-md-4">
-        <h1 class="segoe">Simple UI</h1>
-        <p>
-          To make user interfaces the best they can be, I focus on making
-          my designs clean and simple. Nothing complicated, nothing distracting.
-          I have used Bootstrap, jQuery, and w3.css to create the cleanest
-          pages that I can.
-        </p>
-      </div>
-    </div>
-  </div>
+  <div class="container py-4" id="tos"></div>
+  <script>
+$.ajax({
+    url: 'tos.txt',
+    type: 'GET',
+    dataType: 'text'
+}).done(function(text) {
+    let lines = text.split('\n');
+
+    for (let i = 0; i < lines.length; i++) {
+        let current = lines[i];
+
+        if(current.charCodeAt(0) === 13) {
+            continue;
+        }
+
+        var element;
+        if(current.toUpperCase() === current && current.split(' ').length < 15) {
+            element = document.createElement('H4');
+            element.classList.add('segoe');
+
+            var bolded = document.createElement('STRONG');
+            bolded.innerText = current;
+            element.appendChild(bolded);
+        } else {
+            element = document.createElement('P');
+            element.innerText = current;
+        }
+
+        document.querySelector('#tos').appendChild(element);
+    }
+});
+  </script>
 </body>
 </html>
