@@ -1,6 +1,5 @@
 import os
 import re
-import sys
 
 html_files = [x for x in os.listdir('..') if x.endswith('.html')]
 
@@ -8,7 +7,7 @@ def check(html):
     return html != ''
 
 
-new_navbar = sys.stdin.read()
+new_navbar = open('navbar.html').read()
 
 if check(new_navbar):
     # update
