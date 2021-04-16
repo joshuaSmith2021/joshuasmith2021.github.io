@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>Maggie</title>
+    <base href="https://chessboardjs.com/"/>
+    <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.js" integrity="sha384-s3XgLpvmHyscVpijnseAmye819Ee3yaGa8NxstkJVyA6nuDFjt59u1QvuEl/mecz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <div class="row">
+        <div class="col-md-3">
+            <div id="myBoard" style="height:400px"></div>
+        </div>
+        <div class="col-md-3">
+            <p id="moves">Starting Position</p>
+            <a href="#" data-toggle="tooltip" data-placement="bottom" title="d4, e4" id="moveTooltip">Possible Moves</a>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" value="" id="forceOpenings">
+
+                <label for="forceOpenings" class="form-check-label">
+                    Force Openings
+                </label>
+            </div>
+
+            <div class="btn">
+                <i class="material-icons" onclick="takeback()">chevron_left</i>
+            </div>
+        </div>
+    </div>
+    <script>
+// --- Begin Example JS --------------------------------------------------------
+// NOTE: this example uses the chess.js library:
+// https://github.com/jhlywa/chess.js
+
+var board = null
+var game = new Chess()
+var whiteSquareGrey = '#a9a9a9'
+var blackSquareGrey = '#696969'
+
+const openings = ["1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3 Be6 8. f3 Be7 9. Qd2 O-O 10. O-O-O Nbd7 11. g4 b5 12. g5 b4 13. Ne2 Ne8 14. f4 a5", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3 Be6 8. f3 Nbd7 9. g4 Nb6 10. g5 Nh5 11. Qd2 Be7 12. O-O-O O-O 13. Rg1 Rc8 14. Kb1 g6", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3 Be6 8. f3 Be7 9. Qd2 O-O 10. O-O-O Qc7 11. g4 Rc8 12. g5 Nh5 13. Kb1 Nd7 14. Qf2 b5", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3 Be6 8. f3 Be7 9. Qd2 O-O 10. O-O-O b5 11. Nd5 Bxd5 12. exd5 Qc7 13. g4 Rc8 14. Kb1 b4", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Bg5 e6 7. f4 Qb6 8. Qd2 Qxb2 9. Rb1 Qa3 10. f5 Nc6 11. fxe6 fxe6 12. Nxc6 bxc6 13. e5 dxe5 14. Bxf6 gxf6 15. Ne4 Be7 16. Be2 a5", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nf3 Be7 8. Bc4 O-O 9. O-O Be6 10. Qe2 b5 11. Bb3 h6 12. Rfd1 Nbd7 13. a3 Qe8", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. g3 e5 7. Nde2 b5 8. Bg5 Nbd7 9. Nd5 Be7 10. Bxf6 Nxf6 11. Nec3 Be6 12. a4 b4 13. Nxb4 Qa5", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. g3 e5 7. Nb3 Be7 8. Bg2 O-O 9. O-O Be6 10. a4 Nbd7 11. a5 Qc7 12. Re1 Rfc8 13. h3 h6", "1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. c4 Nf6 6. Nc3 d6 7. f3 Nxd4 8. Qxd4 Bg7 9. Be3 O-O 10. Qd2 Qa5 11. Rc1 Be6 12. Nd5 Qxa2", "1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. c4 Bg7 6. Be3 Nf6 7. Nc3 Ng4 8. Qxg4 Nxd4 9. Qd1 Ne6 10. Rc1 d6 11. b4 O-O 12. Be2 a5", "1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Bf5 5. Ng3 Bg6 6. h4 h6 7. Nf3 Nd7 8. h5 Bh7 9. Bd3 Bxd3 10. Qxd3 Qc7 11. Bd2 e6 12. O-O-O Ngf6 13. Ne4 O-O-O 14. g3 Nxe4 15. Qxe4 Nf6 16. Qe2 Bd6 17. c4 c5", "1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Bf5 5. Ng3 Bg6 6. h4 h6 7. Nf3 Nd7 8. h5 Bh7 9. Bd3 Bxd3 10. Qxd3 Qc7 11. Bd2 e6 12. O-O-O Ngf6 13. Kb1 O-O-O 14. c4 c5 15. Bc3 cxd4 16. Nxd4 a6 17. Nf3 Be7", "1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Bf5 5. Ng3 Bg6 6. h4 h6 7. Nf3 Nd7 8. h5 Bh7 9. Bd3 Bxd3 10. Qxd3 Qc7 11. Bd2 e6 12. Qe2 Ngf6 13. O-O-O O-O-O 14. Ne5 Nb6 15. Ba5 Rd5 16. Bxb6 axb6 17. c4 Ra5", "1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Bf5 5. Ng3 Bg6 6. h4 h6 7. Nf3 Nd7 8. h5 Bh7 9. Bd3 Bxd3 10. Qxd3 e6 11. Bf4 Ngf6 12. O-O-O Qa5 13. Kb1 Be7 14. Ne5 O-O 15. Nxd7 Nxd7 16. Ne4 Nf6 17. g4 Rad8", "1. e4 e5 2. Nf3 Nc6 3. Bb5 Bc5 4. c3 f5 5. d4 fxe4 6. Bxc6 dxc6 7. Nfd2 Bd6 8. dxe5 e3 9. fxe3 Bc5 10. O-O Bxe3+", "1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. O-O Bc5 5. Nxe5 Nxe4 6. Qe2 Nxe5 7. Qxe4 Qe7 8. Nc3 Ng6 9. Qxe7+ Bxe7 10. Nd5 Bd6 11. Re1+ Kd8", "1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. O-O Nxe4 5. d4 Nd6 6. Bxc6 dxc6 7. dxe5 Nf5 8. Qxd8+ Kxd8 9. Nc3 h6 10. h3 Bd7 11. b3 Ke8", "1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. O-O Nxe4 5. d4 Nd6 6. Bxc6 dxc6 7. dxe5 Nf5 8. Qxd8+ Kxd8 9. Rd1+ Ke8 10. Nc3 h6 11. h3 a5", "1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. O-O Nxe4 5. d4 Nd6 6. Bxc6 dxc6 7. dxe5 Ne4 8. Qe2 Bf5 9. Rd1 Qc8 10. Nd4 Bc5 11. b4 Bb6", "1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. d4 exd4 5. e5 Ne4 6. O-O a6 7. Bxc6 dxc6 8. Qe2 Bf5 9. Rd1 Bc5 10. Be3 Qe7 11. Nxd4 Bxd4", "1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. Qe2 Bc5 5. c3 Qe7 6. d3 d6 7. Bg5 h6 8. Bh4 Bd7 9. Nbd2 a6 10. Ba4 g5", "1. e4 e6 2. d4 d5 3. e5 c5 4. c3 Nc6 5. Nf3 Qb6 6. Be2 cxd4 7. cxd4 Nh6 8. Nc3 Nf5 9. Na4 Bb4+ 10. Bd2 Qa5 11. Bc3 b5 12. a3 Bxc3+", "1. e4 e6 2. d4 d5 3. e5 c5 4. c3 Nc6 5. Nf3 Qb6 6. a3 c4 7. Nbd2 Na5 8. Be2 Bd7 9. O-O O-O-O 10. Rb1 Nb3 11. Nxb3 Ba4 12. Be3 Bxb3", "1. e4 e6 2. d4 d5 3. e5 c5 4. c3 Nc6 5. Nf3 Qb6 6. a3 Bd7 7. b4 cxd4 8. cxd4 Rc8 9. Bb2 Na5 10. Nbd2 Nc4 11. Nxc4 dxc4 12. Rc1 a5", "1. e4 e6 2. Nf3 d5 3. Nc3 d4 4. Ne2 c5 5. c3 Nf6 6. d3 Nc6 7. g3 e5 8. Bg2 Be7 9. O-O O-O 10. Ne1", "1. e4 e6 2. d4 d5 3. exd5 exd5 4. Bd3 Bd6 5. c3 Nc6 6. Nf3 Nge7 7. O-O Bg4 8. Re1 Qd7 9. Nbd2 O-O 10. h3 Bf5", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Rc1 c6 8. Bd3 dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. Ne4 Qb4+ 12. Qd2 Qxd2+ 13. Kxd2 Rd8 14. Rhd1 N5f6 15. Nxf6+ Nxf6", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Rc1 c6 8. Bd3 dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. O-O Nxc3 12. Rxc3 e5 13. dxe5 Nxe5 14. Nxe5 Qxe5 15. f4 Qe4 16. Qe2 Bf5 17. Bd3 Qe6 18. e4 Rfe8 19. Re1 Qd6", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Rc1 c6 8. Bd3 dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. O-O Nxc3 12. Rxc3 e5 13. dxe5 Nxe5 14. Nxe5 Qxe5 15. f4 Qe4 16. Qe1 Bf5 17. Bd3 Qd5 18. e4 Qd4+ 19. Qf2 Qxf2+", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Rc1 c6 8. Bd3 dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. O-O Nxc3 12. Rxc3 e5 13. dxe5 Nxe5 14. Nxe5 Qxe5 15. f4 Qf6 16. f5 b5 17. Bb3 b4 18. Rc5 Ba6 19. Rf4 Rad8", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Rc1 c6 8. Bd3 dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. O-O Nxc3 12. Rxc3 e5 13. Bb3 exd4 14. exd4 Nf6 15. Re1 Qd6 16. Rce3 Bg4 17. h3 Bxf3 18. Rxf3", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Rc1 c6 8. Bd3 dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. O-O Nxc3 12. Rxc3 e5 13. Qc2 exd4 14. exd4 Nb6 15. Re1 Qd8 16. Bb3 Nd5 17. Bxd5 Qxd5 18. Re5 Qd6 19. Qe4 f6", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Rc1 c6 8. Bd3 dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. O-O Nxc3 12. Rxc3 e5 13. Qb1 exd4 14. exd4 Nb6 15. Bb3 Qf6 16. Re1 Be6 17. Bxe6 fxe6 18. Rce3 Rae8", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Rc1 c6 8. Bd3 dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. Ne4 e5 12. O-O exd4 13. Qxd4 N7b6 14. Bb3 Bg4 15. Ng3 Bxf3", "1. d4 d5 2. c4 e6 3. Nc3 c5 4. cxd5 exd5 5. Nf3 Nc6 6. g3 Nf6 7. Bg2 Be7 8. O-O O-O 9. Bg5 cxd4 10. Nxd4 h6 11. Be3 Re8 12. Rc1 Bf8 13. Na4 Bd7 14. Nc5 Bxc5 15. Rxc5 Qe7", "1. d4 d5 2. c4 e6 3. Nc3 c5 4. cxd5 exd5 5. Nf3 Nc6 6. g3 Nf6 7. Bg2 Be7 8. O-O O-O 9. Bg5 cxd4 10. Nxd4 h6 11. Be3 Re8 12. Rc1 Bg4 13. h3 Be6 14. Kh2 Qd7 15. Qa4 a6", "1. d4 d5 2. c4 e6 3. Nc3 c5 4. cxd5 exd5 5. Nf3 Nc6 6. g3 Nf6 7. Bg2 Be7 8. O-O O-O 9. Bg5 cxd4 10. Nxd4 h6 11. Be3 Re8 12. Qb3 Na5 13. Qc2 Bg4 14. Nf5 Bb4 15. Bd4 Bxc3", "1. d4 d5 2. c4 e6 3. Nc3 c5 4. cxd5 exd5 5. Nf3 Nc6 6. g3 Nf6 7. Bg2 Be7 8. O-O O-O 9. Bg5 cxd4 10. Nxd4 h6 11. Be3 Re8 12. Qa4 Bd7 13. Rad1 Nb4 14. Qb3 a5 15. a4 Rc8", "1. d4 d5 2. c4 e6 3. Nc3 c5 4. cxd5 exd5 5. Nf3 Nc6 6. g3 Nf6 7. Bg2 Be7 8. O-O O-O 9. Bg5 c4 10. Ne5 Be6 11. Nxc6 bxc6 12. b3 Qa5 13. Na4 Rad8 14. e3 c5 15. Bxf6 gxf6", "1. d4 d5 2. c4 e6 3. Nc3 c5 4. cxd5 exd5 5. Nf3 Nc6 6. g3 Nf6 7. Bg2 Be7 8. O-O O-O 9. Bg5 Be6 10. dxc5 Bxc5 11. Rc1 Bb6 12. b3 d4 13. Ne4 Qe7 14. Nh4 Kh8 15. Bxf6 gxf6"]
+
+var possibleLines = openings
+
+function takeback() { game.undo(); board.position(game.fen()); updatePgn(); }
+
+$('#logLines').click(function() {
+    console.log(possibleLines)
+})
+
+function updateLines() {
+    let string = listToPgn(game.history())
+    let newLines = []
+    for (let i = 0; i < possibleLines.length; i++) {
+        let currentLine = possibleLines[i]
+        if (currentLine.indexOf(string) !== -1) {
+            newLines.push(currentLine)
+        }
+    }
+
+    possibleLines = newLines
+}
+
+function pgnToList(pgn) {
+    let groups = pgn.split(' ')
+    return groups.filter(group => group.charAt(group.length - 1) !== '.')
+}
+
+function listToPgn(list) {
+    let result = []
+    for (let i = 0; i < list.length; i++) {
+        if (i % 2 === 0) result.push(`${i / 2 + 1}.`)
+        result.push(list[i])
+    }
+    return result.join(' ')
+}
+
+function getCorrectMoves() {
+    let string = listToPgn(game.history())
+    let moves = []
+
+    for (let i = 0; i < possibleLines.length; i++) {
+        let current = possibleLines[i];
+        let nextMove = current.replace(string, '').split(' ').filter(x => x.charAt(x.length - 1) !== '.' && x !== '')[0]
+        if (moves.indexOf(nextMove) === -1) moves.push(nextMove)
+    }
+
+    return moves;
+}
+
+function updatePgn() {
+    $('#moves').text(listToPgn(game.history()))
+
+    let moveList = getCorrectMoves().join(', ')
+    if (moveList === '') {
+        moveList = 'No moves in database'
+    }
+
+    $('#moveTooltip').attr('data-original-title', moveList)
+}
+
+function correctMove(move) {
+    let correctMoves = getCorrectMoves();
+    console.log(correctMoves)
+    let attemptedMove = move.san;
+
+    return correctMoves.indexOf(attemptedMove) !== -1;
+}
+
+function removeGreySquares () {
+    $('#myBoard .square-55d63').css('background', '')
+}
+
+function greySquare (square) {
+    var $square = $('#myBoard .square-' + square)
+
+    var background = whiteSquareGrey
+    if ($square.hasClass('black-3c85d')) {
+        background = blackSquareGrey
+    }
+
+    $square.css('background', background)
+}
+
+function onDragStart (source, piece) {
+    // do not pick up pieces if the game is over
+    if (game.game_over()) return false
+
+    // or if it's not that side's turn
+    if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
+            (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
+        return false
+    }
+}
+
+function onDrop (source, target) {
+    removeGreySquares()
+
+    let correctMoves = getCorrectMoves();
+
+    // see if the move is legal
+    var move = game.move({
+        from: source,
+        to: target,
+        promotion: 'q' // NOTE: always promote to a queen for example simplicity
+    })
+
+    // illegal move
+    if (move === null) return 'snapback'
+
+    // see if the move is in a line
+    if (
+        (
+            correctMoves.indexOf(move.san) === -1 ||
+            !correctMoves.length === 0
+        ) &&
+        $('#forceOpenings').is(':checked')
+    ) {
+        takeback()
+        return 'snapback'
+    }
+
+    updatePgn()
+}
+
+function onMouseoverSquare (square, piece) {
+    // get list of possible moves for this square
+    var moves = game.moves({
+        square: square,
+        verbose: true
+    })
+
+    // exit if there are no moves available for this square
+    if (moves.length === 0) return
+
+    // highlight the square they moused over
+    greySquare(square)
+
+    // highlight the possible squares for this piece
+    for (var i = 0; i < moves.length; i++) {
+        greySquare(moves[i].to)
+    }
+}
+
+function onMouseoutSquare (square, piece) {
+    removeGreySquares()
+}
+
+function onSnapEnd () {
+    board.position(game.fen())
+    updateLines()
+}
+
+var config = {
+    draggable: true,
+    position: 'start',
+    onDragStart: onDragStart,
+    onDrop: onDrop,
+    onMouseoutSquare: onMouseoutSquare,
+    onMouseoverSquare: onMouseoverSquare,
+    onSnapEnd: onSnapEnd
+}
+
+board = Chessboard('myBoard', config)
+
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip()
+
+    let moveList = getCorrectMoves().join(', ')
+    $('#moveTooltip').attr('data-original-title', moveList)
+    $('#moveTooltip').attr('data-original-title', moveList)
+})
+    </script>
+</body>
+</html>
