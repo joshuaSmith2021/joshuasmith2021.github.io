@@ -14,23 +14,30 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
-    <div class="row">
-        <div class="col-md-3">
-            <div id="myBoard" style="height:400px"></div>
-        </div>
-        <div class="col-md-3">
-            <p id="moves">Starting Position</p>
-            <a href="#" data-toggle="tooltip" data-placement="bottom" title="d4, e4" id="moveTooltip">Possible Moves</a>
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" value="" id="forceOpenings">
-
-                <label for="forceOpenings" class="form-check-label">
-                    Force Openings
-                </label>
+    <div class="container">
+        <h2 class="display-3">maggie</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <div id="myBoard" style="height:400px"></div>
+                <p id="moveText" style="text-align:center;"></p>
             </div>
+            <div class="col-md-6">
+                <a href="#" data-toggle="tooltip" data-placement="bottom" title="d4, e4" id="moveTooltip">Possible Moves</a>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" value="" id="forceOpenings">
 
-            <div class="btn">
-                <i class="material-icons" onclick="takeback()">chevron_left</i>
+                    <label for="forceOpenings" class="form-check-label">
+                        Force Openings
+                    </label>
+                </div>
+
+                <div class="btn">
+                    <i class="material-icons" onclick="takeback()">chevron_left</i>
+                </div>
+
+                <div style="max-height:500px;overflow-y:scroll;">
+                    <table class="table" id="moves"></table>
+                </div>
             </div>
         </div>
     </div>
@@ -94,8 +101,57 @@ function getCorrectMoves() {
     return moves;
 }
 
+function movesToFen(moves) {
+    let tempGame = new Chess()
+    for (let i = 0; i < moves.length; i++) {
+        tempGame.move(moves[i])
+    }
+
+    return tempGame.fen()
+}
+
+function updateMovelist() {
+    $('#moves').html('')
+    $('#moveText').text(listToPgn(game.history()))
+
+    let history = game.history()
+    for (let i = 0; i < history.length; i++) {
+        if (i % 2 === 0) {
+            let newRow = document.createElement('TR')
+            $('#moves').append(newRow)
+
+            let newCell = document.createElement('TD')
+            newCell.innerText = `${i / 2 + 1}.`
+            newCell.classList.add('move-cell')
+            $('#moves').children().last().append(`${i / 2 + 1}. `)
+        }
+
+        let currentMoves = history.slice(0, i + 1)
+        let currentMove = history[i]
+
+        let moveElement = document.createElement('td')
+        moveElement.innerHTML = currentMove
+        moveElement.classList.add('move-cell')
+        moveElement.setAttribute('data-pgn', listToPgn(currentMoves))
+
+        moveElement.addEventListener('click', function() {
+            game = new Chess()
+
+            for (let j = 0; j < currentMoves.length; j++) {
+                game.move(currentMoves[j])
+            }
+
+            board.position(game.fen())
+
+            updatePgn()
+        })
+
+        $('#moves').children().last().append(moveElement)
+    }
+}
+
 function updatePgn() {
-    $('#moves').text(listToPgn(game.history()))
+    updateMovelist()
 
     let moveList = getCorrectMoves().join(', ')
     if (moveList === '') {
@@ -107,7 +163,6 @@ function updatePgn() {
 
 function correctMove(move) {
     let correctMoves = getCorrectMoves();
-    console.log(correctMoves)
     let attemptedMove = move.san;
 
     return correctMoves.indexOf(attemptedMove) !== -1;
