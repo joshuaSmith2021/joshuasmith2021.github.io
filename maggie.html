@@ -21,7 +21,7 @@
                 <div id="myBoard" style="height:400px"></div>
                 <p id="moveText" style="text-align:center;"></p>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="d4, e4" id="moveTooltip">Possible Moves</a>
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" value="" id="forceOpenings">
@@ -39,6 +39,10 @@
                     <table class="table" id="moves"></table>
                 </div>
             </div>
+            <div class="col-md-3">
+                <h4>Select Openings</h4>
+                <div id="openingSelection"></div>
+            </div>
         </div>
     </div>
     <script>
@@ -51,28 +55,10 @@ var game = new Chess()
 var whiteSquareGrey = '#a9a9a9'
 var blackSquareGrey = '#696969'
 
-const openings = ["1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3 Be6 8. f3 Be7 9. Qd2 O-O 10. O-O-O Nbd7 11. g4 b5 12. g5 b4 13. Ne2 Ne8 14. f4 a5", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3 Be6 8. f3 Nbd7 9. g4 Nb6 10. g5 Nh5 11. Qd2 Be7 12. O-O-O O-O 13. Rg1 Rc8 14. Kb1 g6", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3 Be6 8. f3 Be7 9. Qd2 O-O 10. O-O-O Qc7 11. g4 Rc8 12. g5 Nh5 13. Kb1 Nd7 14. Qf2 b5", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3 Be6 8. f3 Be7 9. Qd2 O-O 10. O-O-O b5 11. Nd5 Bxd5 12. exd5 Qc7 13. g4 Rc8 14. Kb1 b4", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Bg5 e6 7. f4 Qb6 8. Qd2 Qxb2 9. Rb1 Qa3 10. f5 Nc6 11. fxe6 fxe6 12. Nxc6 bxc6 13. e5 dxe5 14. Bxf6 gxf6 15. Ne4 Be7 16. Be2 a5", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nf3 Be7 8. Bc4 O-O 9. O-O Be6 10. Qe2 b5 11. Bb3 h6 12. Rfd1 Nbd7 13. a3 Qe8", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. g3 e5 7. Nde2 b5 8. Bg5 Nbd7 9. Nd5 Be7 10. Bxf6 Nxf6 11. Nec3 Be6 12. a4 b4 13. Nxb4 Qa5", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. g3 e5 7. Nb3 Be7 8. Bg2 O-O 9. O-O Be6 10. a4 Nbd7 11. a5 Qc7 12. Re1 Rfc8 13. h3 h6", "1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. c4 Nf6 6. Nc3 d6 7. f3 Nxd4 8. Qxd4 Bg7 9. Be3 O-O 10. Qd2 Qa5 11. Rc1 Be6 12. Nd5 Qxa2", "1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. c4 Bg7 6. Be3 Nf6 7. Nc3 Ng4 8. Qxg4 Nxd4 9. Qd1 Ne6 10. Rc1 d6 11. b4 O-O 12. Be2 a5", "1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Bf5 5. Ng3 Bg6 6. h4 h6 7. Nf3 Nd7 8. h5 Bh7 9. Bd3 Bxd3 10. Qxd3 Qc7 11. Bd2 e6 12. O-O-O Ngf6 13. Ne4 O-O-O 14. g3 Nxe4 15. Qxe4 Nf6 16. Qe2 Bd6 17. c4 c5", "1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Bf5 5. Ng3 Bg6 6. h4 h6 7. Nf3 Nd7 8. h5 Bh7 9. Bd3 Bxd3 10. Qxd3 Qc7 11. Bd2 e6 12. O-O-O Ngf6 13. Kb1 O-O-O 14. c4 c5 15. Bc3 cxd4 16. Nxd4 a6 17. Nf3 Be7", "1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Bf5 5. Ng3 Bg6 6. h4 h6 7. Nf3 Nd7 8. h5 Bh7 9. Bd3 Bxd3 10. Qxd3 Qc7 11. Bd2 e6 12. Qe2 Ngf6 13. O-O-O O-O-O 14. Ne5 Nb6 15. Ba5 Rd5 16. Bxb6 axb6 17. c4 Ra5", "1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Bf5 5. Ng3 Bg6 6. h4 h6 7. Nf3 Nd7 8. h5 Bh7 9. Bd3 Bxd3 10. Qxd3 e6 11. Bf4 Ngf6 12. O-O-O Qa5 13. Kb1 Be7 14. Ne5 O-O 15. Nxd7 Nxd7 16. Ne4 Nf6 17. g4 Rad8", "1. e4 e5 2. Nf3 Nc6 3. Bb5 Bc5 4. c3 f5 5. d4 fxe4 6. Bxc6 dxc6 7. Nfd2 Bd6 8. dxe5 e3 9. fxe3 Bc5 10. O-O Bxe3+", "1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. O-O Bc5 5. Nxe5 Nxe4 6. Qe2 Nxe5 7. Qxe4 Qe7 8. Nc3 Ng6 9. Qxe7+ Bxe7 10. Nd5 Bd6 11. Re1+ Kd8", "1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. O-O Nxe4 5. d4 Nd6 6. Bxc6 dxc6 7. dxe5 Nf5 8. Qxd8+ Kxd8 9. Nc3 h6 10. h3 Bd7 11. b3 Ke8", "1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. O-O Nxe4 5. d4 Nd6 6. Bxc6 dxc6 7. dxe5 Nf5 8. Qxd8+ Kxd8 9. Rd1+ Ke8 10. Nc3 h6 11. h3 a5", "1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. O-O Nxe4 5. d4 Nd6 6. Bxc6 dxc6 7. dxe5 Ne4 8. Qe2 Bf5 9. Rd1 Qc8 10. Nd4 Bc5 11. b4 Bb6", "1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. d4 exd4 5. e5 Ne4 6. O-O a6 7. Bxc6 dxc6 8. Qe2 Bf5 9. Rd1 Bc5 10. Be3 Qe7 11. Nxd4 Bxd4", "1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. Qe2 Bc5 5. c3 Qe7 6. d3 d6 7. Bg5 h6 8. Bh4 Bd7 9. Nbd2 a6 10. Ba4 g5", "1. e4 e6 2. d4 d5 3. e5 c5 4. c3 Nc6 5. Nf3 Qb6 6. Be2 cxd4 7. cxd4 Nh6 8. Nc3 Nf5 9. Na4 Bb4+ 10. Bd2 Qa5 11. Bc3 b5 12. a3 Bxc3+", "1. e4 e6 2. d4 d5 3. e5 c5 4. c3 Nc6 5. Nf3 Qb6 6. a3 c4 7. Nbd2 Na5 8. Be2 Bd7 9. O-O O-O-O 10. Rb1 Nb3 11. Nxb3 Ba4 12. Be3 Bxb3", "1. e4 e6 2. d4 d5 3. e5 c5 4. c3 Nc6 5. Nf3 Qb6 6. a3 Bd7 7. b4 cxd4 8. cxd4 Rc8 9. Bb2 Na5 10. Nbd2 Nc4 11. Nxc4 dxc4 12. Rc1 a5", "1. e4 e6 2. Nf3 d5 3. Nc3 d4 4. Ne2 c5 5. c3 Nf6 6. d3 Nc6 7. g3 e5 8. Bg2 Be7 9. O-O O-O 10. Ne1", "1. e4 e6 2. d4 d5 3. exd5 exd5 4. Bd3 Bd6 5. c3 Nc6 6. Nf3 Nge7 7. O-O Bg4 8. Re1 Qd7 9. Nbd2 O-O 10. h3 Bf5", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Rc1 c6 8. Bd3 dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. Ne4 Qb4+ 12. Qd2 Qxd2+ 13. Kxd2 Rd8 14. Rhd1 N5f6 15. Nxf6+ Nxf6", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Rc1 c6 8. Bd3 dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. O-O Nxc3 12. Rxc3 e5 13. dxe5 Nxe5 14. Nxe5 Qxe5 15. f4 Qe4 16. Qe2 Bf5 17. Bd3 Qe6 18. e4 Rfe8 19. Re1 Qd6", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Rc1 c6 8. Bd3 dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. O-O Nxc3 12. Rxc3 e5 13. dxe5 Nxe5 14. Nxe5 Qxe5 15. f4 Qe4 16. Qe1 Bf5 17. Bd3 Qd5 18. e4 Qd4+ 19. Qf2 Qxf2+", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Rc1 c6 8. Bd3 dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. O-O Nxc3 12. Rxc3 e5 13. dxe5 Nxe5 14. Nxe5 Qxe5 15. f4 Qf6 16. f5 b5 17. Bb3 b4 18. Rc5 Ba6 19. Rf4 Rad8", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Rc1 c6 8. Bd3 dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. O-O Nxc3 12. Rxc3 e5 13. Bb3 exd4 14. exd4 Nf6 15. Re1 Qd6 16. Rce3 Bg4 17. h3 Bxf3 18. Rxf3", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Rc1 c6 8. Bd3 dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. O-O Nxc3 12. Rxc3 e5 13. Qc2 exd4 14. exd4 Nb6 15. Re1 Qd8 16. Bb3 Nd5 17. Bxd5 Qxd5 18. Re5 Qd6 19. Qe4 f6", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Rc1 c6 8. Bd3 dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. O-O Nxc3 12. Rxc3 e5 13. Qb1 exd4 14. exd4 Nb6 15. Bb3 Qf6 16. Re1 Be6 17. Bxe6 fxe6 18. Rce3 Rae8", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Rc1 c6 8. Bd3 dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. Ne4 e5 12. O-O exd4 13. Qxd4 N7b6 14. Bb3 Bg4 15. Ng3 Bxf3", "1. d4 d5 2. c4 e6 3. Nc3 c5 4. cxd5 exd5 5. Nf3 Nc6 6. g3 Nf6 7. Bg2 Be7 8. O-O O-O 9. Bg5 cxd4 10. Nxd4 h6 11. Be3 Re8 12. Rc1 Bf8 13. Na4 Bd7 14. Nc5 Bxc5 15. Rxc5 Qe7", "1. d4 d5 2. c4 e6 3. Nc3 c5 4. cxd5 exd5 5. Nf3 Nc6 6. g3 Nf6 7. Bg2 Be7 8. O-O O-O 9. Bg5 cxd4 10. Nxd4 h6 11. Be3 Re8 12. Rc1 Bg4 13. h3 Be6 14. Kh2 Qd7 15. Qa4 a6", "1. d4 d5 2. c4 e6 3. Nc3 c5 4. cxd5 exd5 5. Nf3 Nc6 6. g3 Nf6 7. Bg2 Be7 8. O-O O-O 9. Bg5 cxd4 10. Nxd4 h6 11. Be3 Re8 12. Qb3 Na5 13. Qc2 Bg4 14. Nf5 Bb4 15. Bd4 Bxc3", "1. d4 d5 2. c4 e6 3. Nc3 c5 4. cxd5 exd5 5. Nf3 Nc6 6. g3 Nf6 7. Bg2 Be7 8. O-O O-O 9. Bg5 cxd4 10. Nxd4 h6 11. Be3 Re8 12. Qa4 Bd7 13. Rad1 Nb4 14. Qb3 a5 15. a4 Rc8", "1. d4 d5 2. c4 e6 3. Nc3 c5 4. cxd5 exd5 5. Nf3 Nc6 6. g3 Nf6 7. Bg2 Be7 8. O-O O-O 9. Bg5 c4 10. Ne5 Be6 11. Nxc6 bxc6 12. b3 Qa5 13. Na4 Rad8 14. e3 c5 15. Bxf6 gxf6", "1. d4 d5 2. c4 e6 3. Nc3 c5 4. cxd5 exd5 5. Nf3 Nc6 6. g3 Nf6 7. Bg2 Be7 8. O-O O-O 9. Bg5 Be6 10. dxc5 Bxc5 11. Rc1 Bb6 12. b3 d4 13. Ne4 Qe7 14. Nh4 Kh8 15. Bxf6 gxf6"]
-
-var possibleLines = openings
+const openings = {"Sicillian Defence": {"Najdorf, English Attack": ["1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3 Be6 8. f3 Be7 9. Qd2 O-O 10. O-O-O Nbd7 11. g4 b5 12. g5 b4 13. Ne2 Ne8 14. f4 a5", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3 Be6 8. f3 Nbd7 9. g4 Nb6 10. g5 Nh5 11. Qd2 Be7 12. O-O-O O-O 13. Rg1 Rc8 14. Kb1 g6", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3 Be6 8. f3 Be7 9. Qd2 O-O 10. O-O-O Qc7 11. g4 Rc8 12. g5 Nh5 13. Kb1 Nd7 14. Qf2 b5", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nb3 Be6 8. f3 Be7 9. Qd2 O-O 10. O-O-O b5 11. Nd5 Bxd5 12. exd5 Qc7 13. g4 Rc8 14. Kb1 b4"], "Najdorf, Poisoned Pawn Variation": ["1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Bg5 e6 7. f4 Qb6 8. Qd2 Qxb2 9. Rb1 Qa3 10. f5 Nc6 11. fxe6 fxe6 12. Nxc6 bxc6 13. e5 dxe5 14. Bxf6 gxf6 15. Ne4 Be7 16. Be2 h5", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Bg5 e6 7. f4 Qb6 8. Qd2 Qxb2 9. Rb1 Qa3 10. Bxf6 gxf6 11. Be2 Nc6 12. Nxc6 bxc6 13. O-O Qa5 14. Kh1 Be7 15. f5 h5 16. Bf3 Kf8", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Bg5 e6 7. f4 Qb6 8. Qd2 Qxb2 9. Rb1 Qa3 10. e5 dxe5 11. fxe5 Nfd7 12. Ne4 h6 13. Bh4 Qxa2 14. Rd1 Qd5 15. Qe3 Qxe5 16. Be2 Bc5", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Bg5 e6 7. f4 Qb6 8. Qd2 Qxb2 9. Nb3 Qa3 10. Bxf6 gxf6 11. Be2 Nc6 12. O-O Bd7 13. Kh1 Rc8 14. Bh5 Bg7 15. Rf3 O-O 16. Rd1 f5", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Bg5 e6 7. f4 Qb6 8. Nb3 Be7 9. Qf3 Nbd7 10. O-O-O Qc7 11. Bd3 b5 12. a3 Bb7 13. Rhe1 Nc5 14. Qh3 O-O-O 15. Nxc5 dxc5 16. e5 Nd5", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Bg5 e6 7. f4 Qb6 8. Nb3 Nbd7 9. Be2 Be7 10. Qd3 Qc7 11. Bf3 h6 12. Bxf6 Nxf6 13. O-O-O e5 14. f5 Bd7 15. Kb1 b5 16. Nd2 Rc8"], "Najdorf Variation, 6 Be3 and 6 g3": ["1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nf3 Be7 8. Bc4 O-O 9. O-O Be6 10. Qe2 b5 11. Bb3 h6 12. Rfd1 Nbd7 13. a3 Qe8", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. g3 e5 7. Nde2 b5 8. Bg5 Nbd7 9. Nd5 Be7 10. Bxf6 Nxf6 11. Nec3 Be6 12. a4 b4 13. Nxb4 Qa5", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. g3 e5 7. Nb3 Be7 8. Bg2 O-O 9. O-O Be6 10. a4 Nbd7 11. a5 Qc7 12. Re1 Rfc8 13. h3 h6", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 e5 7. Nf3 Qc7 8. a4 Be7 9. a5 O-O 10. Be2 Nbd7 11. O-O b5 12. axb6 Nxb6 13. Qd3 Bb7", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 Ng4 7. Bg5 h6 8. Bh4 g5 9. Bg3 Bg7 10. Be2 h5 11. Bxg4 Bxg4 12. f3 Bd7 13. O-O Nc6", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Be3 Ng4 7. Bg5 h6 8. Bh4 g5 9. Bg3 Bg7 10. h3 Ne5 11. Nf5 Bxf5 12. exf5 Nbc6 13. Nd5 e6"], "Accelerated Dragon, Mar\u00f3czy Bind": ["1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. c4 Nf6 6. Nc3 d6 7. f3 Nxd4 8. Qxd4 Bg7 9. Be3 O-O 10. Qd2 Qa5 11. Rc1 Be6 12. Nd5 Qxa2", "1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. c4 Bg7 6. Be3 Nf6 7. Nc3 Ng4 8. Qxg4 Nxd4 9. Qd1 Ne6 10. Rc1 d6 11. b4 O-O 12. Be2 a5"], "Najdorf Variation, 6 Bg5\u2014Old Main Line": ["1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Bg5 e6 7. f4 Be7 8. Qf3 Qc7 9. O-O-O Nbd7 10. g4 b5 11. Bxf6 Nxf6 12. g5 Nd7 13. f5 Nc5 14. f6 gxf6 15. gxf6 Bf8 16. Rg1 h5 17. Rg7 b4", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Bg5 e6 7. f4 Be7 8. Qf3 Qc7 9. O-O-O Nbd7 10. g4 b5 11. Bxf6 Nxf6 12. g5 Nd7 13. f5 Bxg5+ 14. Kb1 Ne5 15. Qh5 Qe7 16. Nxe6 Bxe6 17. fxe6 g6", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Bg5 e6 7. f4 Be7 8. Qf3 Qc7 9. O-O-O Nbd7 10. g4 b5 11. Bxf6 Nxf6 12. g5 Nd7 13. a3 Rb8 14. h4 b4 15. axb4 Rxb4 16. Bh3 Qc5 17. Nb3 Qb6", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Bg5 e6 7. f4 Be7 8. Qf3 Qc7 9. O-O-O Nbd7 10. Bd3 b5 11. Rhe1 Bb7 12. Qg3 b4 13. Nd5 exd5 14. e5 dxe5 15. fxe5 Nh5 16. Qh4 Bxg5+ 17. Qxg5 g6", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Bg5 e6 7. f4 Be7 8. Qf3 Qc7 9. O-O-O Nbd7 10. Bd3 h6 11. Bh4 g5 12. fxg5 Ne5 13. Qe2 Nfg4 14. Nf3 hxg5 15. Bg3 Nxf3 16. gxf3 Ne5 17. Qf2 b5", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Bg5 e6 7. f4 Be7 8. Qf3 Qc7 9. O-O-O Nbd7 10. Qg3 b5 11. Bxf6 Bxf6 12. Bxb5 O-O 13. Bxd7 Bxd7 14. e5 dxe5 15. Ne4 exd4 16. Nxf6+ Kh8 17. Nh5 Rg8"], "Najdorf Variation, 6 Bg5": ["1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Bg5 e6 7. f4 Be7 8. Qf3 h6 9. Bh4 Qc7 10. O-O-O Nbd7 11. Be2 g5 12. fxg5 Ne5 13. Qe3 Nfg4 14. Bxg4 Nxg4", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Bg5 e6 7. f4 Nbd7 8. Qf3 Qc7 9. O-O-O b5 10. Bxb5 axb5 11. Ndxb5 Qb6 12. e5 Bb7 13. Qe2 h6 14. Bxf6 gxf6"], "Najdorf Variation, Polugaevsky Variation": ["1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Bg5 e6 7. f4 b5 8. e5 dxe5 9. fxe5 Qc7 10. exf6 Qe5+ 11. Be2 Qxg5 12. O-O Qe5 13. Nf3 Bc5+ 14. Kh1 Qxf6", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Bg5 e6 7. f4 b5 8. e5 dxe5 9. fxe5 Qc7 10. Qe2 Nfd7 11. O-O-O Bb7 12. Qg4 Qxe5 13. Bd3 h6 14. Bh4 g5"], "Najdorf Variation, 6 Bg6": ["1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. Bg5 Nbd7 7. Bc4 Qa5 8. Qd2 e6 9. O-O-O b5 10. Bb3 Bb7 11. Rhe1 O-O-O 12. a3 Be7 13. Kb1 Qb6 14. f3 Kb8"], "Dragon Variation, Yugoslav Attack\u2014Soltis Line": ["1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be3 Bg7 7. f3 Nc6 8. Qd2 O-O 9. Bc4 Bd7 10. O-O-O Rc8 11. Bb3 Ne5 12. h4 h5 13. Bg5 Rc5 14. Kb1 b5 15. g4 a5 16. gxh5 a4 17. h6 Bh8 18. h7+ Nxh7 19. Bd5 Bg7", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be3 Bg7 7. f3 Nc6 8. Qd2 O-O 9. Bc4 Bd7 10. O-O-O Rc8 11. Bb3 Ne5 12. h4 h5 13. Bg5 Rc5 14. Kb1 Re8 15. Rhe1 Qa5 16. a3 Qa6 17. f4 Nc4 18. Bxc4 Rxc4 19. e5 Nh7", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be3 Bg7 7. f3 Nc6 8. Qd2 O-O 9. Bc4 Bd7 10. O-O-O Rc8 11. Bb3 Ne5 12. h4 h5 13. Bg5 Rc5 14. f4 Nc4 15. Qd3 Ng4 16. Bxc4 Nf2 17. Qe2 Nxh1 18. Bb3 Qb6 19. f5 Bxd4", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be3 Bg7 7. f3 Nc6 8. Qd2 O-O 9. Bc4 Bd7 10. O-O-O Rc8 11. Bb3 Ne5 12. h4 h5 13. Bh6 Bxh6 14. Qxh6 Rxc3 15. bxc3 Qc7 16. Kb1 Rc8 17. g4 Qxc3 18. gxh5 Nc4 19. Bxc4 Rxc4", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be3 Bg7 7. f3 Nc6 8. Qd2 O-O 9. Bc4 Bd7 10. O-O-O Rc8 11. Bb3 Ne5 12. h4 h5 13. Kb1 Nc4 14. Bxc4 Rxc4 15. Nde2 b5 16. Bh6 Qa5 17. Bxg7 Kxg7 18. Nf4 Rfc8 19. Ncd5 Qxd2", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be3 Bg7 7. f3 Nc6 8. Qd2 O-O 9. Bc4 Bd7 10. O-O-O Rc8 11. Bb3 Ne5 12. h4 h5 13. g4 hxg4 14. h5 Nxh5 15. Bh6 e6 16. Rdg1 Qf6 17. Bxg7 Qxg7 18. fxg4 Nf6 19. Rh4 g5"], "Dragon Variation, Yugoslav Attack": ["1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be3 Bg7 7. f3 O-O 8. Qd2 Nc6 9. Bc4 Bd7 10. O-O-O Rc8 11. Bb3 Ne5 12. h4 Nc4 13. Bxc4 Rxc4 14. h5 Nxh5 15. g4 Nf6 16. Nde2 Re8 17. Bh6 Bh8", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be3 Bg7 7. f3 O-O 8. Qd2 Nc6 9. Bc4 Bd7 10. O-O-O Rc8 11. Bb3 Ne5 12. h4 Nc4 13. Bxc4 Rxc4 14. h5 Nxh5 15. g4 Nf6 16. Bh6 Nxe4 17. Qe3 Rxc3", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be3 Bg7 7. f3 O-O 8. Qd2 Nc6 9. Bc4 Bd7 10. O-O-O Qa5 11. Bb3 Rfc8 12. Kb1 Ne5 13. h4 Nc4 14. Bxc4 Rxc4 15. Nb3 Qc7 16. Bd4 Be6 17. h5 a5", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be3 Bg7 7. f3 O-O 8. Qd2 Nc6 9. Bc4 Bd7 10. O-O-O Qa5 11. Bb3 Rfc8 12. Kb1 Ne5 13. h4 b5 14. Ncxb5 Qxd2 15. Bxd2 Nc4 16. Bxc4 Rxc4 17. b3 Rc5", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be3 Bg7 7. f3 O-O 8. Qd2 Nc6 9. Bc4 Bd7 10. O-O-O Qc7 11. Bb3 Na5 12. h4 Nc4 13. Bxc4 Qxc4 14. Bh6 b5 15. Bxg7 Kxg7 16. Kb1 e6 17. h5 b4", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be3 Bg7 7. f3 O-O 8. Qd2 Nc6 9. Bc4 Nxd4 10. Bxd4 Be6 11. Bb3 Qa5 12. O-O-O b5 13. Kb1 b4 14. Nd5 Bxd5 15. exd5 Qb5 16. Qd3 Qb7 17. Rhe1 a5 18. Ba4"], "Dragon Variation, Yugoslav Attack 9 0-0-0, 9 g4, Misc.": ["1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be3 Bg7 7. f3 O-O 8. Qd2 Nc6 9. O-O-O d5 10. exd5 Nxd5 11. Nxc6 bxc6 12. Bd4 e5 13. Bc5 Be6 14. Ne4 Rb8 15. Bc4 Re8", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be3 Bg7 7. f3 O-O 8. Qd2 Nc6 9. O-O-O d5 10. Qe1 e6 11. h4 Qc7 12. h5 Nxh5 13. exd5 exd5 14. Ndb5 Qg3 15. Bf2 Qf4+", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be3 Bg7 7. f3 O-O 8. Qd2 Nc6 9. O-O-O Nxd4 10. Bxd4 Be6 11. Kb1 Qc7 12. Nd5 Bxd5 13. exd5 Rfc8 14. Rc1 a5 15. Bb5 a4", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be3 Bg7 7. f3 O-O 8. Qd2 Nc6 9. g4 Be6 10. O-O-O Nxd4 11. Bxd4 Qa5 12. a3 Rfc8 13. h4 Rab8 14. h5 b5 15. hxg6 fxg6", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be3 Bg7 7. f3 O-O 8. Qd2 Nc6 9. g4 Be6 10. O-O-O Ne5 11. h4 Bc4 12. Bh3 Ba6 13. b3 Qa5 14. Kb1 Rfc8 15. Nd5 Qxd2", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be3 Bg7 7. f3 Nc6 8. Qd2 Bd7 9. O-O-O Rc8 10. g4 Ne5 11. h4 h5 12. g5 Nh7 13. Kb1 O-O 14. f4 Ng4 15. Bg1 a6"], "Classical Dragon": ["1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be2 Bg7 7. O-O Nc6 8. Be3 O-O 9. Nb3 Be6 10. f4 Qc8 11. Kh1 Bg4 12. Bg1 Rb8 13. Nd4 Bxe2 14. Qxe2 b5 15. e5 dxe5", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be2 Bg7 7. O-O Nc6 8. Be3 O-O 9. Nb3 Be6 10. f4 Na5 11. f5 Bc4 12. Bd3 Bxd3 13. cxd3 d5 14. Nxa5 Qxa5 15. e5 d4", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be2 Bg7 7. O-O Nc6 8. Be3 O-O 9. Nb3 a5 10. a4 Be6 11. f4 Rc8 12. Bf3 Nd7 13. Rf2 Nb6 14. Be2 Nc4 15. Bxc4 Bxc4", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be2 Bg7 7. O-O Nc6 8. Be3 O-O 9. Nb3 a6 10. a4 Be6 11. f4 Rc8 12. f5 Bxb3 13. cxb3 Na5 14. Bd3 Nd7 15. Rc1 Nc5", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be2 Bg7 7. O-O Nc6 8. Be3 O-O 9. Qd2 d5 10. exd5 Nxd5 11. Nxc6 bxc6 12. Rad1 Qc7 13. Nxd5 cxd5 14. Qxd5 Be6 15. Qc5 Qxc5", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be2 Bg7 7. O-O Nc6 8. Be3 O-O 9. f4 Qb6 10. Qd3 Ng4 11. Bxg4 Bxd4 12. Bxd4 Qxd4+ 13. Qxd4 Nxd4 14. Bd1 Be6 15. Rf2 Rac8"], "Dragon Variation, Minor Classical, Levenfish, Misc.": ["1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be2 Bg7 7. O-O O-O 8. Nb3 Nc6 9. Bg5 Be6 10. f4 b5 11. Bf3 b4 12. Nd5 a5 13. a4 bxa3", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be2 Bg7 7. Be3 Nc6 8. Qd2 Ng4 9. Bxg4 Bxg4 10. f3 Bd7 11. Nxc6 bxc6 12. Bh6 Bxh6 13. Qxh6 Qa5", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. f4 Nc6 7. Nxc6 bxc6 8. e5 Nd7 9. exd6 exd6 10. Be3 Be7 11. Qf3 d5 12. O-O-O O-O 13. g4 Bf6", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. f4 Bg7 7. e5 dxe5 8. fxe5 Nfd7 9. e6 Ne5 10. Bb5+ Nbc6 11. exf7+ Kf8 12. Nxc6 Qxd1+ 13. Nxd1", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. f4 Nbd7 7. Be2 Bg7 8. O-O O-O 9. Bf3 a6 10. Nb3 Nb6 11. a4 Be6 12. a5 Nc4 13. g4", "1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. g3 Nc6 7. Nde2 Bg7 8. Bg2 O-O 9. O-O Rb8 10. a4 a6 11. Nd5 b5 12. axb5 axb5 13. Bg5 Nd7"], "Accelerated Dragon": ["1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nc3 Bg7 6. Be3 Nf6 7. Nxc6 bxc6 8. e5 Ng8 9. f4 Nh6 10. Qd2 O-O 11. O-O-O d6 12. h3 Nf5 13. Bf2 c5 14. Bc4 Bb7", "1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nc3 Bg7 6. Be3 Nf6 7. Nxc6 bxc6 8. e5 Nd5 9. Nxd5 cxd5 10. Qxd5 Rb8 11. Bxa7 Rxb2 12. Bd4 Rxc2 13. Bd3 e6 14. Qa8 Rc6", "1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nc3 Bg7 6. Be3 Nf6 7. Bc4 Qa5 8. O-O O-O 9. Bb3 d6 10. h3 Bd7 11. f4 Qh5 12. Nf3 b5 13. a3 a5 14. Qd3 b4", "1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nc3 Bg7 6. Be3 Nf6 7. Bc4 Qa5 8. O-O O-O 9. Nb3 Qc7 10. f4 d6 11. Be2 b6 12. g4 Bb7 13. g5 Nd7 14. Nd5 Qd8", "1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nc3 Bg7 6. Be3 Nf6 7. Bc4 O-O 8. Bb3 a5 9. f3 d5 10. exd5 Nb4 11. Nde2 a4 12. Nxa4 Nfxd5 13. Bf2 Bf5 14. O-O b5"]}, "Caro-Kann Defence": {"Main Line 4... Bf5": ["1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Bf5 5. Ng3 Bg6 6. h4 h6 7. Nf3 Nd7 8. h5 Bh7 9. Bd3 Bxd3 10. Qxd3 Qc7 11. Bd2 e6 12. O-O-O Ngf6 13. Ne4 O-O-O 14. g3 Nxe4 15. Qxe4 Nf6 16. Qe2 Bd6 17. c4 c5", "1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Bf5 5. Ng3 Bg6 6. h4 h6 7. Nf3 Nd7 8. h5 Bh7 9. Bd3 Bxd3 10. Qxd3 Qc7 11. Bd2 e6 12. O-O-O Ngf6 13. Kb1 O-O-O 14. c4 c5 15. Bc3 cxd4 16. Nxd4 a6 17. Nf3 Be7", "1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Bf5 5. Ng3 Bg6 6. h4 h6 7. Nf3 Nd7 8. h5 Bh7 9. Bd3 Bxd3 10. Qxd3 Qc7 11. Bd2 e6 12. Qe2 Ngf6 13. O-O-O O-O-O 14. Ne5 Nb6 15. Ba5 Rd5 16. Bxb6 axb6 17. c4 Ra5", "1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Bf5 5. Ng3 Bg6 6. h4 h6 7. Nf3 Nd7 8. h5 Bh7 9. Bd3 Bxd3 10. Qxd3 e6 11. Bf4 Ngf6 12. O-O-O Qa5 13. Kb1 Be7 14. Ne5 O-O 15. Nxd7 Nxd7 16. Ne4 Nf6 17. g4 Rad8"]}, "Ruy Lopez": {"Classical (Cordel) Defence": ["1. e4 e5 2. Nf3 Nc6 3. Bb5 Bc5 4. c3 f5 5. d4 fxe4 6. Bxc6 dxc6 7. Nfd2 Bd6 8. dxe5 e3 9. fxe3 Bc5 10. O-O Bxe3+", "1. e4 e5 2. Nf3 Nc6 3. Bb5 Bc5 4. c3 Nge7 5. O-O Bb6 6. d4 exd4 7. cxd4 d5 8. exd5 Nxd5 9. Re1+ Be6 10. Bg5 Qd6"], "Berlin Defence": ["1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. O-O Bc5 5. Nxe5 Nxe4 6. Qe2 Nxe5 7. Qxe4 Qe7 8. Nc3 Ng6 9. Qxe7+ Bxe7 10. Nd5 Bd6 11. Re1+ Kd8", "1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. O-O Nxe4 5. d4 Nd6 6. Bxc6 dxc6 7. dxe5 Nf5 8. Qxd8+ Kxd8 9. Nc3 h6 10. h3 Bd7 11. b3 Ke8", "1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. O-O Nxe4 5. d4 Nd6 6. Bxc6 dxc6 7. dxe5 Nf5 8. Qxd8+ Kxd8 9. Rd1+ Ke8 10. Nc3 h6 11. h3 a5", "1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. O-O Nxe4 5. d4 Nd6 6. Bxc6 dxc6 7. dxe5 Ne4 8. Qe2 Bf5 9. Rd1 Qc8 10. Nd4 Bc5 11. b4 Bb6", "1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. d4 exd4 5. e5 Ne4 6. O-O a6 7. Bxc6 dxc6 8. Qe2 Bf5 9. Rd1 Bc5 10. Be3 Qe7 11. Nxd4 Bxd4", "1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. Qe2 Bc5 5. c3 Qe7 6. d3 d6 7. Bg5 h6 8. Bh4 Bd7 9. Nbd2 a6 10. Ba4 g5"], "Exchange Variation": ["1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Bxc6 dxc6 5. O-O f6 6. d4 Bg4 7. dxe5 Qxd1 8. Rxd1 fxe5 9. Rd3 Bd6 10. Nbd2 Nf6 11. b3 O-O-O 12. Bb2 Rhe8", "1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Bxc6 dxc6 5. O-O f6 6. d4 exd4 7. Nxd4 c5 8. Nb3 Qxd1 9. Rxd1 Bg4 10. f3 Be6 11. Nc3 Bd6 12. Be3 b6", "1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Bxc6 dxc6 5. O-O Qd6 6. d3 Ne7 7. Nbd2 Ng6 8. Nc4 Qf6 9. Bg5 Qe6 10. Bd2 Bc5 11. b4 Ba7 12. Be3 O-O", "1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Bxc6 dxc6 5. O-O Bg4 6. h3 h5 7. d3 Qf6 8. Be3 Bxf3 9. Qxf3 Qxf3 10. gxf3 Bd6 11. Nd2 Ne7 12. Rfb1 f5", "1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Bxc6 dxc6 5. O-O Bd6 6. d4 exd4 7. Qxd4 f6 8. b3 Qe7 9. Nbd2 Nh6 10. Nc4 Bc5 11. Qd3 Nf7 12. Be3 O-O", "1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Bxc6 dxc6 5. d4 exd4 6. Qxd4 Qxd4 7. Nxd4 Bd7 8. Be3 O-O-O 9. Nd2 Ne7 10. O-O-O Re8 11. Rhe1 Ng6 12. Ne2 Bd6"]}, "Queen's Gambit Declined": {"Orthodox Variation": ["1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Rc1 c6 8. Bd3 dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. Ne4 Qb4+ 12. Qd2 Qxd2+ 13. Kxd2 Rd8 14. Rhd1 N5f6 15. Nxf6+ Nxf6", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Rc1 c6 8. Bd3 dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. O-O Nxc3 12. Rxc3 e5 13. dxe5 Nxe5 14. Nxe5 Qxe5 15. f4 Qe4 16. Qe2 Bf5 17. Bd3 Qe6 18. e4 Rfe8 19. Re1 Qd6", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Rc1 c6 8. Bd3 dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. O-O Nxc3 12. Rxc3 e5 13. dxe5 Nxe5 14. Nxe5 Qxe5 15. f4 Qe4 16. Qe1 Bf5 17. Bd3 Qd5 18. e4 Qd4+ 19. Qf2 Qxf2+", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Rc1 c6 8. Bd3 dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. O-O Nxc3 12. Rxc3 e5 13. dxe5 Nxe5 14. Nxe5 Qxe5 15. f4 Qf6 16. f5 b5 17. Bb3 b4 18. Rc5 Ba6 19. Rf4 Rad8", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Rc1 c6 8. Bd3 dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. O-O Nxc3 12. Rxc3 e5 13. Bb3 exd4 14. exd4 Nf6 15. Re1 Qd6 16. Rce3 Bg4 17. h3 Bxf3 18. Rxf3", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Rc1 c6 8. Bd3 dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. O-O Nxc3 12. Rxc3 e5 13. Qc2 exd4 14. exd4 Nb6 15. Re1 Qd8 16. Bb3 Nd5 17. Bxd5 Qxd5 18. Re5 Qd6 19. Qe4 f6", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Rc1 c6 8. Bd3 dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. O-O Nxc3 12. Rxc3 e5 13. Qb1 exd4 14. exd4 Nb6 15. Bb3 Qf6 16. Re1 Be6 17. Bxe6 fxe6 18. Rce3 Rae8", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 O-O 6. Nf3 Nbd7 7. Rc1 c6 8. Bd3 dxc4 9. Bxc4 Nd5 10. Bxe7 Qxe7 11. Ne4 e5 12. O-O exd4 13. Qxd4 N7b6 14. Bb3 Bg4 15. Ng3 Bxf3"], "Exchange Variation": ["1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. cxd5 exd5 5. Bg5 c6 6. Nf3 Be7 7. e3 Nbd7 8. Bd3 Nh5 9. Bxe7 Qxe7 10. O-O Nhf6 11. Qc2 O-O 12. Rfe1 g6 13. a3 Nb6", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. cxd5 exd5 5. Bg5 c6 6. Qc2 Na6 7. e3 Nb4 8. Qd2 Bf5 9. Rc1 a5 10. a3 Na6 11. Nge2 h6 12. Bf4 Bd6", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. cxd5 exd5 5. Bg5 c6 6. e3 Bf5 7. Qf3 Bg6 8. Bxf6 Qxf6 9. Qxf6 gxf6 10. Kd2 Nd7 11. Bd3 a5 12. Nf3 Nb6"], "Semi-Tarrasch Variation": ["1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Nf3 c5 5. cxd5 Nxd5 6. e3 Nc6 7. Bd3 cxd4 8. exd4 Be7 9. O-O O-O 10. Re1 Bf6 11. Be4 Nce7 12. Qd3 h6 13. Ne5 Nxc3 14. Qxc3 Nf5 15. Be3 a5 16. Rac1 a4", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Nf3 c5 5. cxd5 Nxd5 6. e3 Nc6 7. Bd3 cxd4 8. exd4 Be7 9. O-O O-O 10. Re1 Bf6 11. Be4 Nce7 12. Qd3 h6 13. Bd2 Bd7 14. Bxd5 exd5 15. Bf4 Be6 16. Be5 Nf5", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Nf3 c5 5. cxd5 Nxd5 6. e3 Nc6 7. Bd3 cxd4 8. exd4 Be7 9. O-O O-O 10. Re1 Bf6 11. Be4 Nce7 12. Qb3 b6 13. Bxd5 Nxd5 14. Nxd5 Qxd5 15. Qxd5 exd5 16. Bg5 Bxg5", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Nf3 c5 5. cxd5 Nxd5 6. e3 Nc6 7. Bd3 cxd4 8. exd4 Be7 9. O-O O-O 10. Re1 Bf6 11. a3 Qb6 12. Be4 Nce7 13. Ne5 g6 14. Bh6 Bg7 15. Bxg7 Kxg7 16. Qd2 Nf6", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Nf3 c5 5. cxd5 Nxd5 6. e3 Nc6 7. Bd3 cxd4 8. exd4 Be7 9. O-O O-O 10. Re1 Nf6 11. a3 b6 12. Bg5 Bb7 13. Bc2 Nd5 14. Qd3 g6 15. h4 Bxg5 16. Nxg5 Nce7", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Nf3 c5 5. cxd5 Nxd5 6. e3 Nc6 7. Bd3 cxd4 8. exd4 Be7 9. O-O O-O 10. Re1 Nf6 11. Bg5 h6 12. Be3 Nb4 13. Bb1 b6 14. Qd2 Re8 15. a3 Nc6 16. Qd3 Bb7", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Nf3 c5 5. cxd5 Nxd5 6. e3 Nc6 7. Bc4 cxd4 8. exd4 Be7 9. O-O O-O 10. Re1 Bf6 11. Ne4 b6 12. a3 Bb7 13. Qd3 Nce7", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Nf3 c5 5. cxd5 Nxd5 6. e3 Nc6 7. Bc4 Nxc3 8. bxc3 Be7 9. O-O O-O 10. Bd3 cxd4 11. exd4 b6 12. Qc2 g6 13. Bh6 Re8", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Nf3 c5 5. cxd5 Nxd5 6. e4 Nxc3 7. bxc3 cxd4 8. cxd4 Nc6 9. Bc4 b5 10. Be2 Bb4+ 11. Bd2 Qa5 12. d5 exd5 13. exd5 Ne7", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Nf3 c5 5. cxd5 Nxd5 6. e4 Nxc3 7. bxc3 cxd4 8. cxd4 Nc6 9. Bc4 b5 10. Bd3 Bb4+ 11. Bd2 Qa5 12. a3 Bxd2+ 13. Qxd2 Qxd2+", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Nf3 c5 5. cxd5 Nxd5 6. e4 Nxc3 7. bxc3 cxd4 8. cxd4 Nc6 9. a3 Be7 10. Bd3 O-O 11. e5 b5 12. Be4 Bb7 13. Qd3 h6", "1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Nf3 c5 5. cxd5 Nxd5 6. g3 Nc6 7. Bg2 Be7 8. O-O O-O 9. Nxd5 exd5 10. dxc5 Bxc5 11. Bg5 Qb6 12. Ne1 h6"]}, "French Defence": {"Advance Variation": ["1. e4 e6 2. d4 d5 3. e5 c5 4. c3 Nc6 5. Nf3 Qb6 6. Be2 cxd4 7. cxd4 Nh6 8. Nc3 Nf5 9. Na4 Bb4+ 10. Bd2 Qa5 11. Bc3 b5 12. a3 Bxc3+", "1. e4 e6 2. d4 d5 3. e5 c5 4. c3 Nc6 5. Nf3 Qb6 6. a3 c4 7. Nbd2 Na5 8. Be2 Bd7 9. O-O O-O-O 10. Rb1 Nb3 11. Nxb3 Ba4 12. Be3 Bxb3", "1. e4 e6 2. d4 d5 3. e5 c5 4. c3 Nc6 5. Nf3 Qb6 6. a3 Bd7 7. b4 cxd4 8. cxd4 Rc8 9. Bb2 Na5 10. Nbd2 Nc4 11. Nxc4 dxc4 12. Rc1 a5"], "Knight Variation (2. Nf3)": ["1. e4 e6 2. Nf3 d5 3. Nc3 d4 4. Ne2 c5 5. c3 Nf6 6. d3 Nc6 7. g3 e5 8. Bg2 Be7 9. O-O O-O 10. Ne1"], "Exchange Variation": ["1. e4 e6 2. d4 d5 3. exd5 exd5 4. Bd3 Bd6 5. c3 Nc6 6. Nf3 Nge7 7. O-O Bg4 8. Re1 Qd7 9. Nbd2 O-O 10. h3 Bf5"]}, "Tarrasch Defence": {"Tarrasch Defence": ["1. d4 d5 2. c4 e6 3. Nc3 c5 4. cxd5 exd5 5. Nf3 Nc6 6. g3 Nf6 7. Bg2 Be7 8. O-O O-O 9. Bg5 cxd4 10. Nxd4 h6 11. Be3 Re8 12. Rc1 Bf8 13. Na4 Bd7 14. Nc5 Bxc5 15. Rxc5 Qe7", "1. d4 d5 2. c4 e6 3. Nc3 c5 4. cxd5 exd5 5. Nf3 Nc6 6. g3 Nf6 7. Bg2 Be7 8. O-O O-O 9. Bg5 cxd4 10. Nxd4 h6 11. Be3 Re8 12. Rc1 Bg4 13. h3 Be6 14. Kh2 Qd7 15. Qa4 a6", "1. d4 d5 2. c4 e6 3. Nc3 c5 4. cxd5 exd5 5. Nf3 Nc6 6. g3 Nf6 7. Bg2 Be7 8. O-O O-O 9. Bg5 cxd4 10. Nxd4 h6 11. Be3 Re8 12. Qb3 Na5 13. Qc2 Bg4 14. Nf5 Bb4 15. Bd4 Bxc3", "1. d4 d5 2. c4 e6 3. Nc3 c5 4. cxd5 exd5 5. Nf3 Nc6 6. g3 Nf6 7. Bg2 Be7 8. O-O O-O 9. Bg5 cxd4 10. Nxd4 h6 11. Be3 Re8 12. Qa4 Bd7 13. Rad1 Nb4 14. Qb3 a5 15. a4 Rc8", "1. d4 d5 2. c4 e6 3. Nc3 c5 4. cxd5 exd5 5. Nf3 Nc6 6. g3 Nf6 7. Bg2 Be7 8. O-O O-O 9. Bg5 c4 10. Ne5 Be6 11. Nxc6 bxc6 12. b3 Qa5 13. Na4 Rad8 14. e3 c5 15. Bxf6 gxf6", "1. d4 d5 2. c4 e6 3. Nc3 c5 4. cxd5 exd5 5. Nf3 Nc6 6. g3 Nf6 7. Bg2 Be7 8. O-O O-O 9. Bg5 Be6 10. dxc5 Bxc5 11. Rc1 Bb6 12. b3 d4 13. Ne4 Qe7 14. Nh4 Kh8 15. Bxf6 gxf6"]}, "King's Indian Defence": {"Classical Variation, Main Line": ["1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. e4 d6 5. Nf3 O-O 6. Be2 e5 7. O-O Nc6 8. d5 Ne7 9. Ne1 Nd7 10. Be3 f5 11. f3 f4 12. Bf2 g5 13. a4 Ng6 14. a5 Kh8 15. Nd3 Nf6 16. c5 h5 17. cxd6 cxd6 18. Nb5", "1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. e4 d6 5. Nf3 O-O 6. Be2 e5 7. O-O Nc6 8. d5 Ne7 9. Ne1 Nd7 10. Be3 f5 11. f3 f4 12. Bf2 g5 13. a4 a5 14. Nd3 b6 15. Be1 Nf6 16. Nf2 h5 17. h3 Kh8 18. Nb5 Neg8", "1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. e4 d6 5. Nf3 O-O 6. Be2 e5 7. O-O Nc6 8. d5 Ne7 9. Ne1 Nd7 10. Be3 f5 11. f3 f4 12. Bf2 g5 13. Rc1 Ng6 14. c5 Nxc5 15. b4 Na6 16. Nd3 h5 17. Nb5 Bd7 18. a4 Bh6"], "Classical Variation, Bayonet Attack": ["1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. e4 d6 5. Nf3 O-O 6. Be2 e5 7. O-O Nc6 8. d5 Ne7 9. b4 Nh5 10. Re1 Nf4 11. Bf1 a5 12. bxa5 Rxa5 13. Nd2 c5 14. a4 Ra6 15. Ra3 h6 16. Nb5 Kh8 17. g3 Nh5", "1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. e4 d6 5. Nf3 O-O 6. Be2 e5 7. O-O Nc6 8. d5 Ne7 9. b4 Nh5 10. Re1 f5 11. Ng5 Nf6 12. Bf3 c6 13. Be3 h6 14. Ne6 Bxe6 15. dxe6 fxe4 16. Nxe4 Nxe4 17. Bxe4 d5"], "Fianchetto System: Classical Variation": ["1. d4 Nf6 2. c4 g6 3. g3 Bg7 4. Bg2 O-O 5. Nf3 d6 6. Nc3 Nbd7 7. O-O e5 8. e4 c6 9. h3 exd4 10. Nxd4 Re8 11. Rb1 a5 12. Re1 Nc5 13. b3 Nh5 14. Be3 Qe7 15. Qd2 Qf8 16. Rbd1 Nf6", "1. d4 Nf6 2. c4 g6 3. g3 Bg7 4. Bg2 O-O 5. Nc3 d6 6. Nf3 Nbd7 7. O-O e5 8. e4 c6 9. h3 Qb6 10. c5 dxc5 11. dxe5 Ne8 12. Be3 Nc7 13. Qc2 Ne6 14. Na4 Qb5 15. Rfd1 c4 16. Nd2 Qa6", "1. d4 Nf6 2. c4 g6 3. g3 Bg7 4. Bg2 O-O 5. Nc3 d6 6. Nf3 Nbd7 7. O-O e5 8. e4 c6 9. h3 Qa5 10. Re1 exd4 11. Nxd4 Ne5 12. Bf1 Re8 13. Nb3 Qc7 14. f4 Ned7 15. Bg2 a5 16. Be3 a4"]}}
 
 function takeback() { game.undo(); board.position(game.fen()); updatePgn(); }
 
-$('#logLines').click(function() {
-    console.log(possibleLines)
-})
-
-function updateLines() {
-    let string = listToPgn(game.history())
-    let newLines = []
-    for (let i = 0; i < possibleLines.length; i++) {
-        let currentLine = possibleLines[i]
-        if (currentLine.indexOf(string) !== -1) {
-            newLines.push(currentLine)
-        }
-    }
-
-    possibleLines = newLines
-}
 
 function pgnToList(pgn) {
     let groups = pgn.split(' ')
@@ -86,19 +72,6 @@ function listToPgn(list) {
         result.push(list[i])
     }
     return result.join(' ')
-}
-
-function getCorrectMoves() {
-    let string = listToPgn(game.history())
-    let moves = []
-
-    for (let i = 0; i < possibleLines.length; i++) {
-        let current = possibleLines[i];
-        let nextMove = current.replace(string, '').split(' ').filter(x => x.charAt(x.length - 1) !== '.' && x !== '')[0]
-        if (moves.indexOf(nextMove) === -1) moves.push(nextMove)
-    }
-
-    return moves;
 }
 
 function movesToFen(moves) {
@@ -150,22 +123,50 @@ function updateMovelist() {
     }
 }
 
+function getSelectedLines() {
+    let checkboxes = document.getElementsByClassName('opening-selection')
+    let active = []
+
+    for (let i = 0; i < checkboxes.length; i++) {
+        let currentBox = checkboxes.item(i)
+        if (currentBox.checked) active.push(currentBox)
+    }
+
+    let result = []
+
+    for (let i = 0; i < active.length; i++) {
+        let currentOpening = active[i].id.replace(/%20/gi, ' ')
+        let variations = Object.keys(openings[currentOpening])
+        for (let j = 0; j < variations.length; j++) {
+            result.push(...openings[currentOpening][variations[j]])
+        }
+    }
+
+    return result
+}
+
+function getNextMoves() {
+    let selectedLines = getSelectedLines()
+    let history = listToPgn(game.history())
+    let activeLines = selectedLines.filter(x => x.indexOf(history) !== -1)
+
+    return [...new Set(activeLines.map(x => {
+        let cont = x.replace(history, '').split(' ').filter(y => y.charAt(y.length - 1) !== '.' && y !== '')
+        return cont[0]
+    }))]
+}
+
 function updatePgn() {
     updateMovelist()
 
-    let moveList = getCorrectMoves().join(', ')
+    let nextMoves = getNextMoves()
+
+    let moveList = nextMoves.join(', ')
     if (moveList === '') {
         moveList = 'No moves in database'
     }
 
     $('#moveTooltip').attr('data-original-title', moveList)
-}
-
-function correctMove(move) {
-    let correctMoves = getCorrectMoves();
-    let attemptedMove = move.san;
-
-    return correctMoves.indexOf(attemptedMove) !== -1;
 }
 
 function removeGreySquares () {
@@ -197,7 +198,7 @@ function onDragStart (source, piece) {
 function onDrop (source, target) {
     removeGreySquares()
 
-    let correctMoves = getCorrectMoves();
+    let correctMoves = getNextMoves()
 
     // see if the move is legal
     var move = game.move({
@@ -249,7 +250,7 @@ function onMouseoutSquare (square, piece) {
 
 function onSnapEnd () {
     board.position(game.fen())
-    updateLines()
+    updatePgn()
 }
 
 var config = {
@@ -267,9 +268,40 @@ board = Chessboard('myBoard', config)
 $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip()
 
-    let moveList = getCorrectMoves().join(', ')
-    $('#moveTooltip').attr('data-original-title', moveList)
-    $('#moveTooltip').attr('data-original-title', moveList)
+    let openingNames = Object.keys(openings)
+    for (let i = 0; i < openingNames.length; i++) {
+        let currentOpening = openingNames[i]
+
+        let openingPick = document.createElement('div')
+        openingPick.classList.add('form-check-inline')
+
+        let openingLabel = document.createElement('label')
+        openingLabel.classList.add('form-check-label')
+
+        let openingBox = document.createElement('input')
+        openingBox.setAttribute('type', 'checkbox')
+        openingBox.classList.add('form-check-input', 'opening-selection')
+        openingBox.id = currentOpening.replace(/ /gi, '%20')
+        openingBox.addEventListener('click', function (e) {
+            updatePgn()
+        })
+
+        let text = document.createTextNode(currentOpening)
+
+        openingLabel.appendChild(openingBox)
+        openingLabel.appendChild(text)
+
+        openingPick.appendChild(openingLabel)
+
+        document.querySelector('#openingSelection').appendChild(openingPick)
+                // <div class="form-check-inline">
+                //     <label class="form-check-label">
+                //         <input type="checkbox" class="form-check-input"> Sicillian Defence
+                //     </label>
+                // </div>
+    }
+
+    getSelectedLines()
 })
     </script>
 </body>
