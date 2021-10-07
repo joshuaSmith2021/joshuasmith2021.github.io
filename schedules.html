@@ -294,11 +294,11 @@ function ScheduleStatusCard(name, schedule) {
             this.statusHeader.text((statusName === 'busy' ?  'Out' : toTitleCase(statusName)))
 
             if (statusName === 'busy') {
-                this.statusText.text(`Busy until ${timeString(nextEvent[3])}`)
+                this.statusText.text(`Busy until ${timeString(timeToDate(nextEvent[3]))}`)
             } else if (statusName === 'done') {
                 this.statusText.text('Done for today')
             } else if (statusName === 'free') {
-                this.statusText.text(`${nextEvent[1]} at ${timeString(nextEvent[2])}`)
+                this.statusText.text(`${nextEvent[1]} at ${timeString(timeToDate(nextEvent[2]))}`)
             } else if (statusName === 'clear') {
                 this.statusText.text('No classes today')
             }
