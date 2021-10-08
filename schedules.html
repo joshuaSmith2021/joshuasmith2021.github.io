@@ -212,15 +212,10 @@ function ScheduleStatusCard(name, schedule) {
             } else if (start <= time && time < end) {
                 return ['busy', event]
             }
-
-            return ['done', null]
         }
 
-        return ['clear', null]
+        return [(events.length === 0 ? 'clear' : 'done'), null]
     }
-
-    // this.cell = $(document.createElement('div'))
-    // this.cell.addClass('col-md-4')
 
     this.card = $(document.createElement('div'))
     this.card.addClass('card')
