@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Jukebox 320</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="resources/css/bootstrap.min.css">
+    <link rel="stylesheet" href="resources/fonts/material-icons.css">
+    <script src="resources/js/jquery.min.js"></script>
+    <script src="resources/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="jumbotron">
+        <h4 class="display-4 text-center">Jukebox 320</h4>
+    </div>
+    <div class="px-4">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Song Title" id="songTitleInput">
+            <div class="input-group-append">
+                <button class="btn btn-primary" id="searchSong">Search</button>
+            </div>
+        </div>
+    </div>
+
+    <ul class="list-group mx-2" id="songList"></ul>
+    <script>
+const songTitleInput = document.querySelector('#songTitleInput')
+const songList = document.querySelector('#songList')
+
+const spotifyQueue = new XMLHttpRequest()
+spotifyQueue.onreadystatechange = function() {
+    if (this.readyState === 4 && this.status === 200) {
+        // let response = JSON.parse(this.responseText)
+        alert(`Your song was added to the queue.`)
+    }
+}
+
+function SongListItem(item) {
+    this.li = document.createElement('li')
+    this.li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center')
+
+    this.img = document.createElement('img')
+    this.img.src = item.album.images[0].url
+    this.img.style.maxHeight = '50px'
+
+    this.string = document.createElement('span')
+    this.string.innerText = `${item.name} - ${item.artists.map(x => x.name).join(', ')}`
+
+    this.queueButton = document.createElement('span')
+    this.queueButton.classList.add('badge', 'badge-success', 'badge-pill', 'material-icons')
+    this.queueButton.innerText = 'queue'
+    this.queueButton.dataset.uri = item.uri
+    this.queueButton.addEventListener('click', function() {
+        let uri = this.dataset.uri
+        spotifyQueue.open('GET', `https://a105-207-62-170-220.ngrok.io/queue_song?uri=${uri}`)
+        spotifyQueue.send()
+    })
+
+    this.li.appendChild(this.img)
+    this.li.appendChild(this.string)
+    this.li.appendChild(this.queueButton)
+
+    return this.li
+}
+
+const spotifySearch = new XMLHttpRequest()
+spotifySearch.onreadystatechange = function() {
+    if (this.readyState === 4 && this.status === 200) {
+        let response = JSON.parse(this.responseText)
+
+        songList.innerHTML = ''
+        response.tracks.items.forEach(item => {
+            songList.appendChild(new SongListItem(item))
+        });
+    }
+}
+
+// spotifySearch.open('GET', 'https://a105-207-62-170-220.ngrok.io/search_spotify?q=grenade')
+// spotifySearch.send()
+
+document.querySelector('#searchSong').addEventListener('click', () => {
+    spotifySearch.open('GET', `https://a105-207-62-170-220.ngrok.io/search_spotify?q=${songTitleInput.value}`)
+    spotifySearch.send()
+})
+    </script>
+</body>
+</html>
