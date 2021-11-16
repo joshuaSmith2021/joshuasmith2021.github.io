@@ -1,95 +1,95 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Joshua Smith</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Web Scraping &amp; Discord bot solutions by Joshua Smith.">
-  <link rel="stylesheet" href="styles.css">
+    <title>Joshua Smith</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Web Scraping &amp; Discord bot solutions by Joshua Smith.">
+    <link rel="stylesheet" href="styles.css">
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
-  <!-- NAVBAR -->
+    <!-- NAVBAR -->
     <nav class="navbar navbar-expand-sm bg-light">
-    <ul class="navbar-nav">
-        <li class="nav-item">
-            <a href="/" class="nav-link">Home</a>
-        </li>
-        <li class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Portfolio</a>
-            <div class="dropdown-menu">
-                <a href="webscraping.html" class="dropdown-item">Discord Bot/Web Scraping</a>
-            </div>
-        </li>
-    </ul>
-</nav>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a href="/" class="nav-link">Home</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Portfolio</a>
+                <div class="dropdown-menu">
+                    <a href="webscraping.html" class="dropdown-item">Discord Bot/Web Scraping</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
     <!-- END NAVBAR -->
 
-  <div class="container-fluid pastel">
-    <div class="container header py-4">
-      <h1 class="display-1 bebas">Web Scraping</h1>
-      <h2 class="display-4">Getting the Data I Need</h2>
+    <div class="container-fluid pastel">
+        <div class="container header py-4">
+            <h1 class="display-1 bebas">Web Scraping</h1>
+            <h2 class="display-4">Getting the Data I Need</h2>
+        </div>
     </div>
-  </div>
-  <div class="container py-4">
-    <div class="row">
-      <div class="col-md-5">
-        <h1 class="segoe">Overview</h1>
+    <div class="container py-4">
+        <div class="row">
+            <div class="col-md-5">
+                <h1 class="segoe">Overview</h1>
+                <p>
+                    With graphics cards being a very important part of a gaming PC,
+                    it is important to make sure that you buy a powerful one for a good price.
+                    To help people discover which graphics card is right for them, I added a
+                    command to my Discord bot that shows people how powerful the Radeon and
+                    GeForce cards are compared to one another to help them pick a card.
+                </p>
+            </div>
+            <div class="col-md-7">
+                <h1 class="segoe">Data Source</h1>
+                <p>
+                    When I was deciding what I would be buying for gaming, I used
+                    <a href="https://www.logicalincrements.com/articles/graphicscardcomparison">a great chart by Logical Increments</a>.
+                    I thought the cards were well-organized, so I thought that it would be the
+                    perfect site to scrape. However, it wasn't super simple to scrape. The actual
+                    data was fetched with JavaScript, so just sending a GET request with Python
+                    requests wasn't going to have the data I needed. It wasn't a huge barrier,
+                    so I opened the console and inspected the network requests being sent when
+                    the page loaded. From here, it wasn't too hard to find the URL that I needed
+                    to GET.
+                </p>
+            </div>
+        </div>
+        <div class="row pt-4">
+            <div class="col-md-4">
+                <figure class="figure">
+                    <img src="resources/images/gpu_list.png" alt="Command output" width="100%">
+                    <figcaption class="figure-caption">Sample Output from the Finished Command</figcaption>
+                </figure>
+            </div>
+            <div class="col-md-6">
+                <h1 class="segoe">Connecting Data to Discord</h1>
+                <p>
+                    Once I was able to get data into a Python script, connecting the data to Discord
+                    wasn't too hard. I always use Discord.py when making bots, so I just added a
+                    command to my main bot that sent a Discord embed to the channel to where the
+                    command was sent.
+                </p>
+            </div>
+        </div>
+        <hr>
+        <h1 class="segoe">Source Code</h1>
         <p>
-          With graphics cards being a very important part of a gaming PC,
-          it is important to make sure that you buy a powerful one for a good price.
-          To help people discover which graphics card is right for them, I added a
-          command to my Discord bot that shows people how powerful the Radeon and
-          GeForce cards are compared to one another to help them pick a card.
+            Below are two GitHub gists containing the scraping file itself and a sample output file.
         </p>
-      </div>
-      <div class="col-md-7">
-        <h1 class="segoe">Data Source</h1>
-        <p>
-          When I was deciding what I would be buying for gaming, I used
-          <a href="https://www.logicalincrements.com/articles/graphicscardcomparison">a great chart by Logical Increments</a>.
-          I thought the cards were well-organized, so I thought that it would be the
-          perfect site to scrape. However, it wasn't super simple to scrape. The actual
-          data was fetched with JavaScript, so just sending a GET request with Python
-          requests wasn't going to have the data I needed. It wasn't a huge barrier,
-          so I opened the console and inspected the network requests being sent when
-          the page loaded. From here, it wasn't too hard to find the URL that I needed
-          to GET.
-        </p>
-      </div>
+        <style>
+            .gist {width:75%!important;margin:auto;}
+            .gist-file
+            .gist-data {max-height: 500px;}
+        </style>
+        <script src="https://gist.github.com/joshuaSmith2021/010969945cee8c9ad69f6808476341f2.js"></script>
     </div>
-    <div class="row">
-      <div class="col-md-4">
-        <figure class="figure">
-          <img src="resources/images/gpu_list.png" alt="Command output" width="100%">
-          <figcaption class="figure-caption">Sample Output from the Finished Command</figcaption>
-        </figure>
-      </div>
-      <div class="col-md-6">
-        <h1 class="segoe">Connecting Data to Discord</h1>
-        <p>
-          Once I was able to get data into a Python script, connecting the data to Discord
-          wasn't too hard. I always use Discord.py when making bots, so I just added a
-          command to my main bot that sent a Discord embed to the channel to where the
-          command was sent.
-        </p>
-      </div>
-    </div>
-    <hr>
-    <h1 class="segoe">Source Code</h1>
-    <p>
-      Below are two GitHub gists containing the scraping file itself and a sample output file.
-    </p>
-    <style>
-      .gist {width:75% !important;margin:auto;}
-      .gist-file
-      .gist-data {max-height: 500px;}
-    </style>
-    <script src="https://gist.github.com/joshuaSmith2021/010969945cee8c9ad69f6808476341f2.js"></script>
-  </div>
 </body>
 </html>
