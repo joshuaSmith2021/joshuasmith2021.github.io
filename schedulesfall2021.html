@@ -90,12 +90,9 @@ const schedules = [
     {
         name: 'Josh',
         events: [
-            ['1234', 'Linear Analysis', '8:10', '9:00'],
-            ['24', 'African American Studies', '9:10', '11:00'],
-            ['135', 'Comp Sci 101', '10:10', '12:00'],
-            ['13', 'Coms', '14:10', '16:00']
-        ],
-        updated: true
+            ['24', 'Calc III', '9:10', '11:00'],
+            ['135', 'Intro to Computing', '14:10', '16:00']
+        ]
     }, {
         name: 'Siddh',
         events: [
@@ -125,14 +122,10 @@ const schedules = [
     },*/ {
         name: 'Kenna',
         events: [
-            ['24', 'Chem II', '8:10', '11:00'],
-            ['13', 'General Psychology', '10:40', '12:00'],
-            ['5', 'General Psychology', '11:10', '12:00'],
-            ['1234', 'Physics I', '13:10', '14:00'],
-            ['5', 'BMED 102', '13:10', '14:00'],
-            ['1245', 'Calc II', '15:10', '16:00']
-        ],
-        updated: true
+            ['1245', 'Calc', '8:10', '9:00'],
+            ['5', 'BMED 101', '13:10', '14:00'],
+            ['24', 'Chemistry', '18:10', '21:00'],
+        ]
     }, {
         name: 'Will',
         events: [
@@ -153,24 +146,20 @@ const schedules = [
     }, {
         name: 'Janelle',
         events: [
-            ['2', 'IME 156', '8:10', '11:00'],
-            ['135', 'General Psychology', '10:40', '12:00'],
-            ['5', 'General Psychology', '10:10', '11:00'],
-            ['1', 'IME 156', '13:10', '14:00'],
-            ['1245', 'Calc II', '15:10', '16:00'],
-            ['24', 'Physics I', '16:10', '18:00']
-        ],
-        updated: true
+            ['1245', 'Calc', '8:10', '9:00'],
+            ['135', 'Chem', '9:10', '11:00'],
+            ['2', 'IME Lecture', '9:10', '11:00'],
+            ['134', 'IME Lab', '12:10', '15:00']
+        ]
     }, {
         name: 'Emily',
         events: [
-            ['135', 'Chem 124', '7:10', '9:00'],
-            ['1245', 'Calc IV', '12:10', '13:00'],
-            ['15', 'Physics III', '14:10', '15:00'],
-            ['3', 'Physics III', '14:10', '18:00'],
-            ['24', 'CPE 101', '13:40', '16:30']
-        ],
-        updated: true
+            ['13', 'History', '8:10', '10:00'],
+            ['24', 'Physics', '9:10', '11:00'],
+            ['5', 'EE Lecture', '11:10', '12:00'],
+            ['1245', 'Math', '12:10', '13:00'],
+            ['4', 'EE Lab', '15:10', '18:00'],
+        ]
     }
 ]
 
@@ -198,6 +187,8 @@ function getEvents(schedule) {
     let day = String(dt.getDay())
 
     let events = schedule.filter(event => event[0].indexOf(day) !== -1)
+
+    events.sort(x => timeToDate(x[2]).getTime())
 
     return events
 }
@@ -319,7 +310,6 @@ function ScheduleStatusCard(name, schedule) {
 const scheduleCards = []
 for (let i = 0; i < schedules.length; i++) {
     let currentSchedule = schedules[i]
-    if (!(currentSchedule.updated || false)) continue
     scheduleCards.push(new ScheduleStatusCard(currentSchedule.name, currentSchedule.events))
 }
 
