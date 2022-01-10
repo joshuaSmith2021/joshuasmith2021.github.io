@@ -93,7 +93,7 @@ const schedules = [
             ['1234', 'Linear Analysis', '8:10', '9:00'],
             ['24', 'African American Studies', '9:10', '11:00'],
             ['135', 'Comp Sci 101', '10:10', '12:00'],
-            ['13', 'Coms', '14:10', '16:00']
+            ['24', 'Coms', '14:10', '16:00']
         ],
         updated: true
     }, {
@@ -113,16 +113,16 @@ const schedules = [
             ['24', 'Calc I', '16:10', '18:00'],
             ['3', 'ME Lab', '18:10', '21:00'],
         ]
-    }, /* {
+    }, {
         name: 'Phillip',
         events: [
-            ['2', 'IME 144 Lecture', timeToDate('9:10'), timeToDate('11:00')],
-            ['3', 'IME 101', timeToDate('9:10'), timeToDate('12:00')],
-            ['24', 'IME 144 Lab', timeToDate('12:10'), timeToDate('15:00')],
-            ['135', 'General Chemistry', timeToDate('16:10'), timeToDate('18:00')],
-            ['24', 'Calc I', timeToDate('16:10'), timeToDate('18:00')]
+            ['2', 'IME 144 Lecture', '9:10', '11:00'],
+            ['3', 'IME 101', '9:10', '12:00'],
+            ['24', 'IME 144 Lab', '12:10', '15:00'],
+            ['135', 'General Chemistry', '16:10', '18:00'],
+            ['24', 'Calc I', '16:10', '18:00']
         ]
-    },*/ {
+    }, {
         name: 'Kenna',
         events: [
             ['24', 'Chem II', '8:10', '11:00'],
@@ -145,11 +145,11 @@ const schedules = [
     }, {
         name: 'Collin',
         events: [
-            ['13', 'Psych', '10:40', '12:00'],
-            ['1', 'Psych', '13:10', '14:00'],
-            ['13', 'Ethnic Studies', '16:10', '18:00'],
-            ['24', 'Pre Calc', '16:10', '18:00'],
-        ]
+            ['135', 'Chem 124', '9:10', '11:00'],
+            ['24', 'Arch 218', '9:10', '11:00'],
+            ['1245', 'Math 141', '11:10', '12:00']
+        ],
+        updated: true
     }, {
         name: 'Janelle',
         events: [
@@ -265,7 +265,7 @@ function ScheduleStatusCard(name, schedule) {
                 let startString = timeString(timeToDate(event[2]))
                 let endString = timeString(timeToDate(event[3]))
 
-                let eventString = `${eventName} ${startString}–${endString}`
+                let eventString = `${eventName} ${startString}&ndash;${endString}`
                 this.cardText.append(eventString)
                 this.cardText.append(document.createElement('br'))
             }
