@@ -51,11 +51,12 @@ function SongListItem(item) {
 
     this.queueButton = document.createElement('span')
     this.queueButton.classList.add('badge', 'badge-success', 'badge-pill', 'material-icons')
+    this.queueButton.style.cursor = 'pointer'
     this.queueButton.innerText = 'queue'
     this.queueButton.dataset.uri = item.uri
     this.queueButton.addEventListener('click', function() {
         let uri = this.dataset.uri
-        spotifyQueue.open('GET', `https://a105-207-62-170-220.ngrok.io/queue_song?uri=${uri}`)
+        spotifyQueue.open('GET', `https://api.joshthings.com/queue_song?uri=${uri}`)
         spotifyQueue.send()
     })
 
@@ -82,7 +83,7 @@ spotifySearch.onreadystatechange = function() {
 // spotifySearch.send()
 
 document.querySelector('#searchSong').addEventListener('click', () => {
-    spotifySearch.open('GET', `https://a105-207-62-170-220.ngrok.io/search_spotify?q=${songTitleInput.value}`)
+    spotifySearch.open('GET', `https://api.joshthings.com/search_spotify?q=${songTitleInput.value}`)
     spotifySearch.send()
 })
     </script>
