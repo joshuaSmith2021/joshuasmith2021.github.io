@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Joshua Smith</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Flask REST Server by Joshua Smith.">
+    <link rel="stylesheet" href="styles.css">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-sm bg-light">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a href="/" class="nav-link">Home</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Portfolio</a>
+                <div class="dropdown-menu">
+                    <a href="webscraping.html" class="dropdown-item">Discord Bot/Web Scraping</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+    <!-- END NAVBAR -->
+
+    <div class="container-fluid pastel">
+        <div class="container header py-4">
+            <h1 class="display-1 bebas">Flask REST Server</h1>
+            <h2 class="display-4">Taking Care of Everything</h2>
+        </div>
+    </div>
+    <div class="container py-4">
+        <div class="row">
+            <div class="col-md-4">
+                <h1 class="segoe">Overview</h1>
+                <p>
+                    When I started off in college, I noticed lots of things
+					that I wanted to automate with Python. I wrote and deployed a server
+					to take care of some tasks, and these are a few of my favorite feautures.
+                </p>
+            </div>
+            <div class="col-md-8">
+                <h1 class="segoe">Laundry</h1>
+                <p>
+                    My first problem was laundry. There are five floors in my
+					building, but only four washers and four dryers. Machines
+					were chronically unavailable, but interestingly you can
+					check their availability online. My first endpoint on the
+					server did some webscraping on the laundry website and
+					returned some JSON data with the laundry status. I then
+					integrated this into an app on my Google Home, Apple
+					Watch, and iPhone. The laundry-related functions can be
+					seen on <a href="https://github.com/joshuaSmith2021/joshthings-server/blob/master/laundry.py">laundry.py</a>
+                </p>
+            </div>
+        </div>
+		<div class="row">
+			<div class="col-md-6">
+				<h1 class="segoe">Music</h1>
+				<p>
+					Everyone has song requests, so the next thing I did was integrate Spotify. This involved a couple of endpoints and lots of functions to handle OAuth. In the end, I had a QR code up on my dresser that people could scan to take them to <a href="jukebox.html">jukebox.html</a>, which would then send requests to my server. The Spotify functions are <a href="https://github.com/joshuaSmith2021/joshthings-server/blob/master/spotify.py">available on GitHub</a>.
+				</p>
+			</div>
+		</div>
+        <div class="row pt-4">
+            <div class="col-md-4">
+                <figure class="figure">
+                    <img src="resources/images/gpu_list.png" alt="Command output" width="100%">
+                    <figcaption class="figure-caption">Sample Output from the Finished Command</figcaption>
+                </figure>
+            </div>
+            <div class="col-md-6">
+                <h1 class="segoe">Connecting Data to Discord</h1>
+                <p>
+                    Once I was able to get data into a Python script, connecting the data to Discord
+                    wasn't too hard. I always use Discord.py when making bots, so I just added a
+                    command to my main bot that sent a Discord embed to the channel to where the
+                    command was sent.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
