@@ -33,44 +33,20 @@
 
     <div class="container-fluid pastel">
         <div class="container header py-4">
-            <h1 class="display-1 bebas">Flask REST Server</h1>
-            <h2 class="display-4">Taking Care of Everything</h2>
+            <h1 class="display-1 bebas">Angle Tracker</h1>
+            <h2 class="display-4">Valorant Stats Tool</h2>
         </div>
     </div>
     <div class="container py-4">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-12">
                 <h1 class="segoe">Overview</h1>
                 <p>
-                    When I started off in college, I noticed lots of things
-					that I wanted to automate with Python. I wrote and deployed a server
-					to take care of some tasks, and these are a few of my favorite feautures.
-                </p>
-            </div>
-            <div class="col-md-8">
-                <h1 class="segoe">Laundry</h1>
-                <p>
-                    My first problem was laundry. There are five floors in my
-					building, but only four washers and four dryers. Machines
-					were chronically unavailable, but interestingly you can
-					check their availability online. My first endpoint on the
-					server did some webscraping on the laundry website and
-					returned some JSON data with the laundry status. I then
-					integrated this into an app on my Google Home, Apple
-					Watch, and iPhone. The laundry-related functions can be
-					seen on <a href="https://github.com/joshuaSmith2021/joshthings-server/blob/master/laundry.py">laundry.py</a>
+                    Angle Tracker is a tool that analyzes a player's matches to find the hottest locations on each map. The idea is to help players discover which angles they hold best and notice patterns that reveal common places they forget to check. It also analyzes how well they follow up on ability uses (this is mostly for duelists and initiators) in order to help them figure out the most effective ways to use their utility. Players love looking at their KDA on each map with each gun, and with this tool, they will be able to examine their KDA by their specific location on the map, by gun, following certain ability uses by them or a teammate, and much more. To summarize, this application is best described as a data analysis tool that allows players to improve their game sense by showing them what type of play style yields the most efficient result for them. Ideally, as the user base expands, more players can contribute more data to a central data analysis system that can show top angles by rank, map, character, and more.
+
                 </p>
             </div>
         </div>
-		<br>
-		<div class="row">
-			<div class="col-md-6">
-				<h1 class="segoe">Music</h1>
-				<p>
-					Everyone has song requests, so the next thing I did was integrate Spotify. This involved a couple of endpoints and lots of functions to handle OAuth. In the end, I had a QR code up on my dresser that people could scan to take them to <a href="jukebox.html">jukebox.html</a>, which would then send requests to my server. The Spotify functions are <a href="https://github.com/joshuaSmith2021/joshthings-server/blob/master/spotify.py">available on GitHub</a>.
-				</p>
-			</div>
-		</div>
     </div>
 </body>
 </html>
