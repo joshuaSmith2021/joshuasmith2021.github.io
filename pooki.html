@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Josh Schedule</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="resources/css/bootstrap.min.css">
+    <link rel="stylesheet" href="resources/fonts/material-icons.css">
+    <script src="resources/js/jquery.min.js"></script>
+    <script src="resources/js/bubbly-bg.js"></script>
+    <script src="resources/js/bootstrap.min.js"></script>
+    <style>
+.clock {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    border-radius: 5px;
+    text-align: right;
+}
+
+.status {
+    padding: 15px;
+    border-radius: 5px;
+}
+
+body {
+    padding: 15px;
+}
+    </style>
+</head>
+<body>
+    <div class="card-columns p-5" id="scheduleRow"></div>
+
+    <div class="text-light clock">
+        <h4 class="display-1" id="liveTime"></h4>
+        <h4 id="liveDate"></h4>
+    </div>
+    <script src="./resources/js/bubbly-bg.js"></script>
+    <script>
+bubbly({
+    colorStart: '#111',
+    colorStop: '#422',
+    bubbleFunc:() => `hsla(0, 100%, 50%, ${Math.random() * 0.25})`
+})
+
+// Utility functions
+function timeToDate(time) {
+    let timeSplit = time.split(':')
+    let hour = parseInt(timeSplit[0], 10)
+    let minute = parseInt(timeSplit[1], 10)
+
+    let dt = new Date()
+    dt.setHours(hour, minute, 0, 0)
+
+    return dt
+}
+
+function timeString(dt) {
+    let hours = dt.getHours()
+    let hour = (hours > 12 ? hours - 12 : (hours > 0 ? hours : 12))
+
+    let minutes = dt.getMinutes()
+    let minute = (minutes >= 10 ? minutes : `0${minutes}`)
+
+    let ampm = (hours > 11 ? 'PM' : 'AM')
+
+    return `${hour}:${minute} ${ampm}`
+}
+
+function toTitleCase(str) {
+    return str.replace(
+        /\w\S*/g,
+        function(txt) {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+    }
+  )
+}
+
+const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July','August', 'September', 'October', 'November', 'December'
+]
+
+const weekDays = [
+    'Sunday', 'Monday', 'Tuesday', 'Wednesday',
+    'Thursday', 'Friday', 'Saturday'
+]
+
+// Sunday - 0
+const schedules = [
+    {
+        name: 'Josh',
+        events: [
+            ['1245', 'MOP in Math', '10:10', '11:00'],
+            ['135', 'CPE 225', '11:10', '13:00'],
+            ['24', 'CPE 203', '12:10', '3:00'],
+            ['2', 'Philosophy (online)', '16:10', '18:00'],
+            ['4', 'Philosophy (in person)', '16:10', '18:00']
+        ],
+        updated: true
+    }
+]
+
+const statuses = {
+    'busy': 'bg-danger',
+    'free': 'bg-primary',
+    'done': 'bg-success',
+    'clear': 'bg-success'
+}
+
+const statusClasses = Object.values(statuses)
+
+function updateClock() {
+    let dt = new Date()
+
+    let dateString = `${weekDays[dt.getDay()]}, ${months[dt.getMonth()]} ${dt.getDate()}, ${dt.getFullYear()}`
+    $('#liveDate').text(dateString)
+
+    $('#liveTime').text(timeString(dt))
+}
+
+function getEvents(schedule) {
+    // Get the events that are happening today on a specific schedule
+    let dt = new Date()
+    let day = String(dt.getDay())
+
+    let events = schedule.filter(event => event[0].indexOf(day) !== -1)
+
+    return events
+}
+
+function ScheduleStatusCard(name, schedule) {
+    this.schedule = schedule
+
+    this.status = () => {
+        let dt = new Date()
+        let time = dt.getTime()
+
+        let events = getEvents(this.schedule)
+
+        for (let i = 0; i < events.length; i++) {
+            let event = events[i]
+            let start = timeToDate(event[2]).getTime()
+            let end = timeToDate(event[3]).getTime()
+
+            if (time < start) {
+                return ['free', event]
+            } else if (start <= time && time < end) {
+                return ['busy', event]
+            }
+        }
+
+        return [(events.length === 0 ? 'clear' : 'done'), null]
+    }
+
+    this.card = $(document.createElement('div'))
+    this.card.addClass('card')
+    this.card.data('events', JSON.stringify(undefined))
+
+    // Prepare status section
+    this.statusDisplay = $(document.createElement('div'))
+    this.statusDisplay.addClass('status m-2 text-light')
+    this.statusHeader = $(document.createElement('h4'))
+    this.statusHeader.addClass('display-4')
+    this.statusText = $(document.createElement('h4'))
+    this.statusDisplay.append(this.statusHeader, this.statusText)
+
+    // Prepare card body
+    this.cardBody = $(document.createElement('div'))
+    this.cardBody.addClass('card-body')
+    this.cardTitle = $(document.createElement('h4'))
+    this.cardTitle.addClass('card-title')
+    this.cardTitle.text(name)
+    this.cardText = $(document.createElement('div'))
+    this.cardText.addClass('card-text')
+    this.cardBody.append(this.cardTitle, this.cardText)
+
+    // Add status and body to card
+    this.card.append(this.statusDisplay, this.cardBody)
+    // this.cell.append(this.card)
+
+    this.updateScheduleDisplay = () => {
+        let events = getEvents(this.schedule)
+        this.cardText.empty()
+
+        if (events.length === 0) {
+            this.cardText.text('No classes today')
+        } else {
+            for (let i = 0; i < events.length; i++) {
+                let event = events[i]
+                let eventName = event[1]
+                let startString = timeString(timeToDate(event[2]))
+                let endString = timeString(timeToDate(event[3]))
+
+                let eventString = `${eventName} ${startString} &#8211; ${endString}`
+                this.cardText.append(eventString)
+                this.cardText.append(document.createElement('br'))
+            }
+        }
+
+        this.card.data('events', JSON.stringify(events))
+    }
+
+    this.checkStatus = () => {
+        let currentStatus = this.status()
+        let statusName = currentStatus[0]
+        let nextEvent = currentStatus[1]
+        let statusClass = statuses[statusName]
+
+        let currentEvents = getEvents(this.schedule)
+
+        if (this.card.data('events') !== JSON.stringify(currentEvents)) {
+            this.updateScheduleDisplay()
+        }
+
+        if (!this.statusDisplay.hasClass(statusClass)) {
+            for (let i = 0; i < statusClasses.length; i++) {
+                let currentStatusClass = statusClasses[i]
+                if (this.statusDisplay.hasClass(currentStatusClass)) {
+                    this.statusDisplay.toggleClass(currentStatusClass)
+                }
+            }
+
+            this.statusDisplay.addClass(statusClass)
+            this.statusHeader.text((statusName === 'busy' ?  'Out' : toTitleCase(statusName)))
+
+            if (statusName === 'busy') {
+                this.statusText.text(`Busy until ${timeString(timeToDate(nextEvent[3]))}`)
+            } else if (statusName === 'done') {
+                this.statusText.text('Done for today')
+            } else if (statusName === 'free') {
+                this.statusText.text(`${nextEvent[1]} at ${timeString(timeToDate(nextEvent[2]))}`)
+            } else if (statusName === 'clear') {
+                this.statusText.text('No classes today')
+            }
+        }
+    }
+
+    this.checkStatus()
+
+    $('#scheduleRow').append(this.card)
+
+    return this
+}
+
+const scheduleCards = []
+for (let i = 0; i < schedules.length; i++) {
+    let currentSchedule = schedules[i]
+    if (!(currentSchedule.updated || false)) continue
+    scheduleCards.push(new ScheduleStatusCard(currentSchedule.name, currentSchedule.events))
+}
+
+function updateSchedules() {
+    for (let i = 0; i < scheduleCards.length; i++) {
+        let currentCard = scheduleCards[i]
+        currentCard.checkStatus()
+    }
+}
+
+function updateEverything() {
+    updateSchedules()
+}
+
+// updateSchedule(schedules[0])
+setInterval(updateEverything, 100)
+    </script>
+</body>
+</html>
