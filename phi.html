@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Totient Function Playground</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="jumbotron text-center">
+        <h1>\(\phi(n)\)</h1>
+        <p>Explore Euler's Totient Function for different \(n \in \mathbb{N}\)</p>
+    </div>
+
+    <div class="container">
+        <div class="py-4">
+            <input type="text" placeholder="Number" id="numberInput">
+            <button class="btn btn-primary mx-1" id="addNumber">Add</button>
+        </div>
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>\(n\in\mathbb{N}\)</th>
+                    <th>Prime Factorization</th>
+                    <th>\(\phi(n)\)</th>
+                    <th>\(\prod_{p \mid n}^{n}\frac{p-1}{p}\)</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+        </table>
+    </div>
+
+    <script>
+// BEGIN miller-rabin.js
+
+function _randint(a, b) {
+    /**
+     * Return a random integer in [a, b].
+     */
+    return Math.floor(Math.random() * (b - a + 1) ) + a
+}
+
+function _power(x, y, p) {
+    result = 1
+
+    x = x % p
+    while (y > 0) {
+        if (y & 1)
+            result = (result * x) % p
+
+        y >>= 1;
+        x = (x * x) % p
+    }
+
+    return result
+}
+
+function _millerTest(d, n) {
+    a = 2 + _randint(1, n - 4)
+
+    x = _power(a, d, n)
+
+    if (x == 1 || x == n - 1)
+        return true
+
+    while (d !== n - 1) {
+        x = (x * x) % n
+        d *= 2
+
+        if (x == 1)
+            return false
+
+        if (x == n - 1)
+            return true
+    }
+
+    return false
+}
+
+function isPrime(n, k) {
+    if (n < 5)
+        return n === 2 || n === 3
+    else if (n % 2 == 0)
+        return false
+
+    d = n - 1
+    while (d % 2 === 0)
+        d = Math.floor(d / 2)
+
+    for (let _ = 0; _ < k; _++) {
+        if (!_millerTest(d, n))
+            return false
+    }
+
+    return true
+}
+
+// END   miller-rabin.js
+
+
+const primeNumberGenerator = function*() {
+    yield 2
+    yield 3
+
+    let n = 6
+    while (true) {
+        if (isPrime(n - 1))
+            yield n - 1
+
+        if (isPrime(n + 1))
+            yield n + 1
+
+        n += 6
+    }
+}
+
+function primesLessThanN(n) {
+    let result = []
+    for (let p of primeNumberGenerator()) {
+        if (p < n)
+            result.push(p)
+        else
+            break
+    }
+
+    return result
+}
+
+function primeFactorization(n) {
+    let result = {}
+    if (isPrime(n, 4)) {
+        result[n] = 1
+        return result
+    }
+
+    for (let prime of primeNumberGenerator()) {
+        if (prime > n) break
+        while (n % prime === 0) {
+            result[prime] = (result[prime] || 0) + 1
+            n /= prime
+        }
+    }
+
+    return result
+}
+
+function phi(n) {
+    if (isPrime(n, 4)) {
+        return n - 1
+    }
+
+    let distinctPrimeFactors = Object.keys(primeFactorization(n))
+    let product = 1
+
+    for (let factor of distinctPrimeFactors) {
+        product *= (1 - 1 / factor)
+    }
+
+    return Math.round(n * product)
+}
+
+class Number {
+    constructor(n) {
+        this.n = n
+        this.primeFactors = primeFactorization(n)
+        this.phi = phi(n)
+    }
+
+    factorizationString() {
+        let factors = []
+        let distinctPrimeFactors = Object.keys(this.primeFactors)
+        distinctPrimeFactors.sort((a, b) => parseInt(a) - parseInt(b))
+        for (let factor of distinctPrimeFactors) {
+            factors.push(`${factor}^{${this.primeFactors[factor]}}`)
+        }
+        return `\\(${factors.join('\\cdot')}\\)`
+    }
+
+    productString() {
+        let factors = []
+        let distinctPrimeFactors = Object.keys(this.primeFactors)
+        distinctPrimeFactors.sort((a, b) => parseInt(a) - parseInt(b))
+        for (let factor of distinctPrimeFactors) {
+            factors.push(`\\frac{${factor - 1}}{${factor}}`)
+        }
+        return `\\(${factors.join('\\cdot')}\\)`
+    }
+
+    tableRow() {
+        let row = document.createElement('tr')
+        let nCell = document.createElement('td')
+        let factorizationCell = document.createElement('td')
+        let phiCell = document.createElement('td')
+        let productCell = document.createElement('td')
+        let removeCell = document.createElement('td')
+            let removeButton = document.createElement('button')
+
+        row.appendChild(nCell)
+        row.appendChild(factorizationCell)
+        row.appendChild(phiCell)
+        row.appendChild(productCell)
+        row.appendChild(removeCell)
+            removeCell.appendChild(removeButton)
+
+        nCell.innerText = this.n
+        factorizationCell.innerText = this.factorizationString()
+        phiCell.innerText = this.phi
+        productCell.innerText = this.productString()
+
+        removeButton.classList.add('btn', 'btn-danger')
+        removeButton.innerHTML = '&times;'
+        removeButton.addEventListener('click', function() {
+            row.innerHTML = ''
+            row.remove()
+        })
+
+        return row
+    }
+}
+
+function addNumber(n) {
+    let number = new Number(n)
+    tbody.appendChild(number.tableRow())
+    MathJax.typeset()
+}
+
+document.querySelector('#addNumber').addEventListener('click', function() {
+    let tbody = document.querySelector('#tbody')
+    let numberInput = document.querySelector('#numberInput')
+
+    let digits = /\d+/.exec(numberInput.value)
+    if (digits == numberInput.value && parseInt(numberInput.value))
+        addNumber(parseInt(numberInput.value))
+    else
+        alert('Please enter a postive number with no non-digit characters.')
+
+    numberInput.value = ''
+})
+
+    </script>
+</body>
+</html>
